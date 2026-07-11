@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan de Entrenamiento — Temporada 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap');
+
+  :root {
+    --verde: #1a7a4a;
+    --verde-claro: #27ae60;
+    --cesped: #0d5c35;
+    --lima: #b5e550;
+    --blanco: #f5f7f2;
+    --gris: #2c2c2c;
+    --gris-medio: #555;
+    --gris-claro: #e8ece4;
+    --naranja: #e07b30;
+    --azul: #2c6fad;
+    --rojo: #c0392b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--blanco);
+    color: var(--gris);
+    line-height: 1.5;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--cesped);
+    background-image: repeating-linear-gradient(
+      90deg, transparent, transparent 48px,
+      rgba(255,255,255,0.03) 48px, rgba(255,255,255,0.03) 96px
+    );
+    padding: 48px 24px 40px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 4px;
+    background: var(--lima);
+  }
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--lima);
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(36px, 8vw, 72px);
+    font-weight: 900;
+    line-height: 0.9;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero h1 span { color: var(--lima); }
+  .stats-row {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+    align-items: flex-start;
+  }
+  .stat-pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  .stat-pill strong {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--lima);
+  }
+
+  /* PROGRESO GLOBAL HERO */
+  .hero-progress {
+    margin-top: 24px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    padding: 14px 18px;
+    max-width: 460px;
+  }
+  .hero-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 8px;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .hero-progress-label span:last-child {
+    color: var(--lima);
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .hero-progress-bar-bg {
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+    height: 6px;
+    overflow: hidden;
+  }
+  .hero-progress-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--lima);
+    transition: width 0.5s ease;
+  }
+  .hero-progress-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 6px;
+  }
+
+  /* CONTENEDOR */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* SECCIONES */
+  section {
+    padding: 40px 0;
+    border-bottom: 1px solid var(--gris-claro);
+  }
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  /* FASES */
+  .fases {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .fase {
+    border-radius: 6px;
+    padding: 16px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    border: 2px solid transparent;
+    position: relative;
+  }
+  .fase:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+  .fase.active { border-color: var(--lima); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+  .fase-1 { background: #e8f5ee; }
+  .fase-2 { background: #ddf0e6; }
+  .fase-3 { background: #ccebdb; }
+  .fase-numero {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 4px;
+  }
+  .fase-titulo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--cesped);
+    margin-bottom: 4px;
+  }
+  .fase-semanas { font-size: 12px; color: var(--gris-medio); }
+  .fase-objetivo { font-size: 13px; color: var(--gris); margin-top: 8px; line-height: 1.4; }
+  .fase-completado {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--verde);
+    font-weight: 600;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 1px;
+  }
+
+  /* SEMANA DETALLE */
+  .semana-detalle {
+    background: white;
+    border: 1px solid var(--gris-claro);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .semana-tabs {
+    display: flex;
+    overflow-x: auto;
+    background: var(--cesped);
+    scrollbar-width: none;
+  }
+  .semana-tabs::-webkit-scrollbar { display: none; }
+  .semana-tab {
+    padding: 10px 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s;
+    position: relative;
+  }
+  .semana-tab.active { color: var(--lima); border-bottom-color: var(--lima); }
+  .semana-tab .tab-check {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 11px;
+    color: var(--lima);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .semana-tab.tiene-completados .tab-check { opacity: 1; }
+
+  .semana-content { padding: 0; }
+
+  /* FILA DÍA */
+  .dia-row {
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    border-bottom: 1px solid var(--gris-claro);
+    min-height: 52px;
+    transition: background 0.2s;
+  }
+  .dia-row:last-child { border-bottom: none; }
+  .dia-row.completado { background: #f0faf4; }
+  .dia-nombre {
+    padding: 14px 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--gris-medio);
+    border-right: 1px solid var(--gris-claro);
+    display: flex;
+    align-items: center;
+    background: #fafbf9;
+    transition: background 0.2s;
+  }
+  .dia-row.completado .dia-nombre { background: #e4f5ec; color: var(--verde); }
+  .dia-ejercicio {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    flex-wrap: wrap;
+  }
+  .dia-row.completado .dia-ejercicio { text-decoration: none; }
+  .dia-texto {
+    transition: color 0.2s;
+  }
+  .dia-row.completado .dia-texto {
+    color: var(--gris-medio);
+  }
+
+  /* BOTÓN CHECK */
+  .btn-check {
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid var(--gris-claro);
+    cursor: pointer;
+    user-select: none;
+    background: transparent;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    transition: background 0.15s;
+    min-width: 54px;
+  }
+  .btn-check:hover { background: #f0faf4; }
+  .check-circle {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--gris-claro);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    background: white;
+    flex-shrink: 0;
+  }
+  .dia-row.completado .check-circle {
+    background: var(--verde-claro);
+    border-color: var(--verde-claro);
+  }
+  .check-circle svg { opacity: 0; transition: opacity 0.2s; }
+  .dia-row.completado .check-circle svg { opacity: 1; }
+
+  /* BADGES TIPO */
+  .tipo-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .badge-cardio { background: #dbeeff; color: var(--azul); }
+  .badge-fuerza { background: #fce8d8; color: var(--naranja); }
+  .badge-descanso { background: var(--gris-claro); color: var(--gris-medio); }
+  .badge-futbol { background: #d5f0e4; color: var(--cesped); }
+  .badge-mixto { background: #f0d5f3; color: #7b2d8b; }
+
+  /* SEMANA PROGRESS BAR */
+  .semana-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: #fafbf9;
+    border-bottom: 1px solid var(--gris-claro);
+    font-size: 12px;
+    color: var(--gris-medio);
+  }
+  .semana-progress-bar-bg {
+    flex: 1;
+    background: var(--gris-claro);
+    border-radius: 3px;
+    height: 5px;
+    overflow: hidden;
+  }
+  .semana-progress-bar-fill {
+    height: 100%;
+    background: var(--verde-claro);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .semana-progress-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--verde);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* CARDIO */
+  .cardio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .cardio-card {
+    background: white;
+    border: 1px solid var(--gris-claro);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .cardio-header {
+    padding: 12px 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .header-natacion { background: var(--azul); }
+  .header-running { background: var(--naranja); }
+  .cardio-body { padding: 16px; }
+  .cardio-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--gris-claro);
+    font-size: 13px;
+  }
+  .cardio-item:last-child { border-bottom: none; }
+  .cardio-item-label { color: var(--gris-medio); }
+  .cardio-item-val { font-weight: 600; color: var(--gris); }
+
+  /* PESAS */
+  .pesas-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 16px;
+  }
+  .pesas-table th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 8px 12px;
+    background: var(--cesped);
+    color: white;
+  }
+  .pesas-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--gris-claro);
+    vertical-align: top;
+  }
+  .pesas-table tr:nth-child(even) td { background: #fafbf9; }
+  .muscle-tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: #e8f5ee;
+    color: var(--cesped);
+    margin-right: 4px;
+    margin-bottom: 2px;
+  }
+  .series-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--verde);
+  }
+
+  /* NUTRICIÓN */
+  .nutri-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .nutri-card {
+    background: white;
+    border: 1px solid var(--gris-claro);
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+  }
+  .nutri-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--verde);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .nutri-label { font-size: 12px; color: var(--gris-medio); }
+  .nutri-sub { font-size: 11px; color: #aaa; margin-top: 2px; }
+
+  .tip-list {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .tip-list li {
+    display: flex;
+    gap: 10px;
+    font-size: 13px;
+    align-items: flex-start;
+    padding: 10px 14px;
+    background: white;
+    border: 1px solid var(--gris-claro);
+    border-radius: 6px;
+  }
+  .tip-icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
+
+  /* BARRA PROGRESO */
+  .progress-section { margin-top: 16px; }
+  .progress-item { margin-bottom: 14px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+  .progress-label span:first-child { font-weight: 500; }
+  .progress-label span:last-child { color: var(--gris-medio); font-size: 12px; }
+  .progress-bar-bg {
+    background: var(--gris-claro);
+    border-radius: 3px;
+    height: 6px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--verde-claro);
+    transition: width 0.6s ease;
+  }
+
+  .alerta {
+    background: #fff8e6;
+    border-left: 3px solid var(--naranja);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    margin-top: 16px;
+    color: var(--gris);
+  }
+
+  @media (max-width: 600px) {
+    .cardio-grid { grid-template-columns: 1fr; }
+    .fases { grid-template-columns: 1fr; }
+    .stats-row { gap: 12px; }
+    .dia-row { grid-template-columns: 72px 1fr auto; }
+  }
+
+  /* DIETA */
+  .diet-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .diet-tab {
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--gris-claro);
+    font-size: 13px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--gris-medio);
+    font-family: 'Barlow', sans-serif;
+    transition: all 0.15s;
+  }
+  .diet-tab:hover { background: white; color: var(--gris); }
+  .diet-tab.active { background: white; color: var(--gris); border-color: var(--gris-medio); font-weight: 600; }
+  .diet-tab .ddot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+    position: relative; top: -1px;
+  }
+  .ddot-entreno { background: var(--azul); }
+  .ddot-descanso { background: var(--gris-medio); }
+
+  .diet-card {
+    background: white;
+    border: 1px solid var(--gris-claro);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .diet-header {
+    padding: 14px 18px 12px;
+    border-bottom: 1px solid var(--gris-claro);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    background: #fafbf9;
+  }
+  .diet-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--gris);
+  }
+  .diet-kcal { font-size: 13px; color: var(--gris-medio); }
+  .diet-tipo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+  .diet-tipo-entreno { background: #dbeeff; color: var(--azul); }
+  .diet-tipo-descanso { background: var(--gris-claro); color: var(--gris-medio); }
+
+  .meal-row {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--gris-claro);
+    align-items: start;
+    transition: background 0.15s;
+  }
+  .meal-row:last-of-type { border-bottom: none; }
+  .meal-row.meal-open { background: #f8fdf9; }
+  .meal-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gris-medio);
+    padding-top: 2px;
+  }
+  .meal-main { font-size: 14px; color: var(--gris); line-height: 1.4; font-weight: 500; }
+  .meal-alt { font-size: 12px; color: var(--gris-medio); margin-top: 3px; }
+  .meal-kcal { font-size: 12px; color: var(--gris-medio); white-space: nowrap; padding-top: 3px; }
+
+  .btn-receta {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    border: 1px solid var(--gris-claro);
+    background: white;
+    color: var(--verde);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    margin-top: 4px;
+  }
+  .btn-receta:hover { background: var(--verde); color: white; border-color: var(--verde); }
+
+  .receta-box {
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: white;
+    border: 1px solid #d4ead9;
+    border-radius: 6px;
+    border-left: 3px solid var(--verde-claro);
+  }
+  .receta-tiempo {
+    font-size: 12px;
+    color: var(--verde);
+    font-weight: 600;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .receta-pasos {
+    list-style: decimal;
+    padding-left: 18px;
+    display: grid;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+  .receta-pasos li { font-size: 13px; color: var(--gris); line-height: 1.4; }
+  .receta-tip {
+    font-size: 12px;
+    color: var(--gris-medio);
+    font-style: italic;
+    padding-top: 8px;
+    border-top: 1px solid var(--gris-claro);
+  }
+  .receta-cargando { margin-top: 10px; font-size: 13px; color: var(--verde); font-style: italic; display:flex; align-items:center; gap:8px; }
+  .spinner-inline {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border: 2px solid #d4ead9;
+    border-top-color: var(--verde);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+
+  .diet-macros {
+    padding: 12px 18px;
+    border-top: 1px solid var(--gris-claro);
+    background: #fafbf9;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .diet-macro-item { font-size: 13px; color: var(--gris-medio); }
+  .diet-macro-item strong { color: var(--gris); font-weight: 600; }
+  .diet-macro-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    margin-right: 5px;
+    vertical-align: middle;
+    position: relative; top: -1px;
+  }
+
+  /* LISTA COMPRA */
+  .compra-prog-bg { flex:1; height:5px; background:var(--gris-claro); border-radius:3px; overflow:hidden; }
+  .compra-prog-fill { height:100%; background:var(--verde-claro); border-radius:3px; transition:width 0.3s ease; }
+  .compra-btn-reset {
+    font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:1px; text-transform:uppercase;
+    padding:5px 12px; border-radius:4px; border:1px solid var(--gris-claro);
+    background:white; color:var(--gris-medio); cursor:pointer;
+  }
+  .compra-btn-reset:hover { background:var(--gris-claro); }
+  .compra-secciones { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px; }
+  .compra-sec { background:white; border:1px solid var(--gris-claro); border-radius:8px; overflow:hidden; }
+  .compra-sec-header {
+    display:flex; align-items:center; gap:8px; padding:10px 14px;
+    border-bottom:1px solid var(--gris-claro); background:#fafbf9;
+  }
+  .compra-sec-nombre { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--gris); }
+  .compra-sec-count { font-size:11px; color:var(--gris-medio); margin-left:auto; }
+  .compra-items { list-style:none; padding:4px 0; }
+  .compra-item {
+    display:flex; align-items:flex-start; gap:10px; padding:8px 14px;
+    cursor:pointer; transition:background 0.1s;
+  }
+  .compra-item:hover { background:#f5faf7; }
+  .compra-item.ci-done { opacity:0.4; }
+  .compra-check {
+    width:18px; height:18px; border-radius:4px; border:1px solid var(--gris-claro);
+    flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    margin-top:1px; transition:all 0.15s; background:white;
+  }
+  .compra-item.ci-done .compra-check { background:var(--verde-claro); border-color:var(--verde-claro); }
+  .compra-check-icon { font-size:11px; color:white; opacity:0; transition:opacity 0.15s; }
+  .compra-item.ci-done .compra-check-icon { opacity:1; }
+  .compra-item-nombre { font-size:13px; color:var(--gris); line-height:1.4; }
+  .compra-item.ci-done .compra-item-nombre { text-decoration:line-through; color:var(--gris-medio); }
+  .compra-item-qty { font-size:12px; color:var(--gris-medio); margin-top:1px; }
+</style>
+</head>
+<body>
+
+<div id="recetas-status" style="display:none;">
+  <div class="spinner"></div>
+  Generando recetas…
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Plan personalizado · Temporada 2026</div>
+    <h1>7 semanas<br>hacia el <span>once</span></h1>
+    <div class="stats-row">
+      <div class="stat-pill"><strong>42</strong>años</div>
+      <div class="stat-pill"><strong>1,71 m · 90 kg</strong>IMC 30,8</div>
+      <div class="stat-pill"><strong>~84 kg</strong>objetivo temporada</div>
+      <div class="stat-pill"><strong>3–5</strong>sesiones / semana</div>
+    </div>
+    <div class="hero-progress" id="hero-progress-container">
+      <div class="hero-progress-label">
+        <span>Progreso del plan</span>
+        <span id="hero-progress-pct">0%</span>
+      </div>
+      <div class="hero-progress-bar-bg">
+        <div class="hero-progress-bar-fill" id="hero-progress-fill" style="width:0%"></div>
+      </div>
+      <div class="hero-progress-sub" id="hero-progress-sub">0 de 49 días completados</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- FASES -->
+  <section>
+    <div class="section-label">Estructura del plan</div>
+    <h2>Tres fases de progresión</h2>
+    <div class="fases">
+      <div class="fase fase-1 active" id="fase-btn-1" onclick="mostrarFase(1, this)">
+        <div class="fase-numero">Fase 01</div>
+        <div class="fase-titulo">Base aeróbica</div>
+        <div class="fase-semanas">Semanas 1–2</div>
+        <div class="fase-objetivo">Rodaje suave, acostumbrar al cuerpo al esfuerzo. Volumen bajo, intensidad baja.</div>
+        <div class="fase-completado" id="fase-prog-1"></div>
+      </div>
+      <div class="fase fase-2" id="fase-btn-2" onclick="mostrarFase(2, this)">
+        <div class="fase-numero">Fase 02</div>
+        <div class="fase-titulo">Construcción</div>
+        <div class="fase-semanas">Semanas 3–5</div>
+        <div class="fase-objetivo">Más volumen, cargas progresivas en mancuernas. Intervalos en cardio.</div>
+        <div class="fase-completado" id="fase-prog-2"></div>
+      </div>
+      <div class="fase fase-3" id="fase-btn-3" onclick="mostrarFase(3, this)">
+        <div class="fase-numero">Fase 03</div>
+        <div class="fase-titulo">Puesta a punto</div>
+        <div class="fase-semanas">Semanas 6–7</div>
+        <div class="fase-objetivo">Simular esfuerzo de partido. Trabajo explosivo y reducción de volumen.</div>
+        <div class="fase-completado" id="fase-prog-3"></div>
+      </div>
+    </div>
+
+    <div class="semana-detalle" id="detalle-fase">
+      <div class="semana-tabs" id="tabs-container"></div>
+      <div class="semana-content" id="semana-content"></div>
+    </div>
+  </section>
+
+  <!-- CARDIO -->
+  <section>
+    <div class="section-label">Cardio</div>
+    <h2>Natación & Running</h2>
+    <p style="font-size:14px; color:var(--gris-medio); margin-bottom:16px;">
+      Alterna los dos tipos para evitar el sobreuso articular y mantener la motivación. La natación protege las rodillas; el running simula el esfuerzo del partido.
+    </p>
+    <div class="cardio-grid">
+      <div class="cardio-card">
+        <div class="cardio-header header-natacion">🏊 Natación</div>
+        <div class="cardio-body">
+          <div class="cardio-item"><span class="cardio-item-label">Fase 1 (sem. 1–2)</span><span class="cardio-item-val">30 min continuo, estilo libre</span></div>
+          <div class="cardio-item"><span class="cardio-item-label">Fase 2 (sem. 3–5)</span><span class="cardio-item-val">40 min · series 4×100m</span></div>
+          <div class="cardio-item"><span class="cardio-item-label">Fase 3 (sem. 6–7)</span><span class="cardio-item-val">30 min · 6×50m sprint</span></div>
+          <div class="cardio-item"><span class="cardio-item-label">Frecuencia cardíaca</span><span class="cardio-item-val">65–75% FC máx.</span></div>
+          <div class="cardio-item"><span class="cardio-item-label">FC máx. estimada</span><span class="cardio-item-val">178 ppm → zona 120–133</span></div>
+        </div>
+      </div>
+      <div class="cardio-card">
+        <div class="cardio-header header-running">🏃 Running</div>
+        <div class="cardio-body">
+          <div class="cardio-item"><span class="cardio-item-label">Fase 1 (sem. 1–2)</span><span class="cardio-item-val">20–25 min trote suave</span></div>
+          <div class="cardio-item"><span class="cardio-item-label">Fase 2 (sem. 3–5)</span><span class="cardio-item-val">30–35 min · 4×3 min ritmo</span></div>
+          <div class="cardio-item"><span class="cardio-item-label">Fase 3 (sem. 6–7)</span><span class="cardio-item-val">Fartlek 25 min + sprints</span></div>
+          <div class="cardio-item"><span class="cardio-item-label">Ritmo inicial</span><span class="cardio-item-val">Conversación posible</span></div>
+          <div class="cardio-item"><span class="cardio-item-label">Terreno</span><span class="cardio-item-val">Tierra/hierba preferible</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="alerta">⚠️ Con 90 kg, evita correr todos los días seguidos al principio. La natación en días alternos protege rodillas y caderas.</div>
+  </section>
+
+  <!-- PESAS -->
+  <section>
+    <div class="section-label">Fuerza con mancuernas</div>
+    <h2>Circuito funcional</h2>
+    <p style="font-size:14px; color:var(--gris-medio); margin-bottom:4px;">
+      Dos sesiones por semana. Enfocadas en piernas, core y estabilidad — lo que más necesitas para el fútbol.
+    </p>
+    <table class="pesas-table">
+      <thead>
+        <tr>
+          <th>Ejercicio</th>
+          <th>Músculo</th>
+          <th>Fase 1–2</th>
+          <th>Fase 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Sentadilla con mancuernas</strong></td><td><span class="muscle-tag">Cuádriceps</span><span class="muscle-tag">Glúteos</span></td><td><span class="series-badge">3×12</span></td><td><span class="series-badge">4×10</span></td></tr>
+        <tr><td><strong>Zancadas alternadas</strong></td><td><span class="muscle-tag">Cuádriceps</span><span class="muscle-tag">Isquios</span></td><td><span class="series-badge">3×10</span></td><td><span class="series-badge">4×12</span></td></tr>
+        <tr><td><strong>Hip hinge (peso muerto rumano)</strong></td><td><span class="muscle-tag">Isquios</span><span class="muscle-tag">Lumbar</span></td><td><span class="series-badge">3×10</span></td><td><span class="series-badge">4×10</span></td></tr>
+        <tr><td><strong>Press de hombros sentado</strong></td><td><span class="muscle-tag">Deltoides</span><span class="muscle-tag">Tríceps</span></td><td><span class="series-badge">3×12</span></td><td><span class="series-badge">4×10</span></td></tr>
+        <tr><td><strong>Remo con mancuerna</strong></td><td><span class="muscle-tag">Dorsal</span><span class="muscle-tag">Bíceps</span></td><td><span class="series-badge">3×12</span></td><td><span class="series-badge">4×10</span></td></tr>
+        <tr><td><strong>Plancha lateral (cada lado)</strong></td><td><span class="muscle-tag">Core oblicuo</span><span class="muscle-tag">Cadera</span></td><td><span class="series-badge">3×25s</span></td><td><span class="series-badge">4×35s</span></td></tr>
+        <tr><td><strong>Plancha frontal</strong></td><td><span class="muscle-tag">Core</span><span class="muscle-tag">Lumbar</span></td><td><span class="series-badge">3×30s</span></td><td><span class="series-badge">4×45s</span></td></tr>
+        <tr><td><strong>Curl de bíceps + press</strong></td><td><span class="muscle-tag">Bíceps</span><span class="muscle-tag">Hombro</span></td><td><span class="series-badge">3×12</span></td><td><span class="series-badge">3×12</span></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px; color:var(--gris-medio); margin-top:10px;">Descanso entre series: 60–90 seg en fase 1–2 · 45–60 seg en fase 3</p>
+  </section>
+
+  <!-- NUTRICIÓN -->
+  <section>
+    <div class="section-label">Nutrición</div>
+    <h2>Directrices básicas</h2>
+    <p style="font-size:14px; color:var(--gris-medio); margin-bottom:4px;">Para perder ~6 kg en 7 semanas de forma saludable, apunta a un déficit moderado de 500–600 kcal/día.</p>
+    <div class="nutri-grid">
+      <div class="nutri-card"><div class="nutri-num">~2.200</div><div class="nutri-label">kcal/día objetivo</div><div class="nutri-sub">días de entrenamiento</div></div>
+      <div class="nutri-card"><div class="nutri-num">~2.000</div><div class="nutri-label">kcal/día objetivo</div><div class="nutri-sub">días de descanso</div></div>
+      <div class="nutri-card"><div class="nutri-num">150g</div><div class="nutri-label">proteína mínima</div><div class="nutri-sub">~1,7 g/kg peso corporal</div></div>
+      <div class="nutri-card"><div class="nutri-num">3 L</div><div class="nutri-label">agua diaria</div><div class="nutri-sub">+500 ml por sesión</div></div>
+    </div>
+    <ul class="tip-list">
+      <li><span class="tip-icon">🥩</span><div><strong>Proteína en cada comida:</strong> pollo, huevo, atún, legumbres, queso fresco.</div></li>
+      <li><span class="tip-icon">⏰</span><div><strong>Come antes de entrenar:</strong> un plátano o tostada con pavo 30–60 min antes.</div></li>
+      <li><span class="tip-icon">🍚</span><div><strong>Carbohidratos estratégicos:</strong> arroz, pasta, pan los días de entreno. No los elimines.</div></li>
+      <li><span class="tip-icon">🚫</span><div><strong>Lo que más suma calorías sin saciarte:</strong> alcohol, refrescos, salsas, ultraprocesados.</div></li>
+      <li><span class="tip-icon">😴</span><div><strong>El sueño también cuenta:</strong> 7–8 h mínimo para recuperar y perder grasa.</div></li>
+    </ul>
+  </section>
+
+  <!-- DIETA SEMANAL -->
+  <section>
+    <div class="section-label">Nutrición</div>
+    <h2>Menú semanal orientativo</h2>
+    <p style="font-size:14px; color:var(--gris-medio); margin-bottom:20px;">Días de entreno ~2.200 kcal · días de descanso ~2.000 kcal. El menú es una guía, no un régimen estricto.</p>
+
+    <div class="diet-tabs" id="diet-tabs"></div>
+    <div class="diet-card" id="diet-card"></div>
+  </section>
+
+  <!-- PROYECCIÓN -->
+  <section>
+    <div class="section-label">Proyección</div>
+    <h2>Qué esperar semana a semana</h2>
+    <div class="progress-section">
+      <div class="progress-item">
+        <div class="progress-label"><span>Capacidad aeróbica</span><span>+65% en 7 semanas</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:65%; background:#2c6fad;"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Fuerza funcional</span><span>+40% en 7 semanas</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:40%; background:var(--naranja);"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Pérdida de grasa estimada</span><span>4–6 kg (con dieta)</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:55%; background:var(--verde-claro);"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Recuperación post-partido</span><span>Mucho mejor que ahora</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:70%; background:var(--cesped);"></div></div>
+      </div>
+    </div>
+    <div class="alerta" style="background:#e8f5ee; border-color:var(--verde);">
+      ✅ <strong>Señal de buena evolución:</strong> en la semana 3, deberías poder correr 25 min sin parar y notar que los primeros minutos cuestan menos.
+    </div>
+  </section>
+
+  <!-- LISTA DE LA COMPRA -->
+  <section>
+    <div class="section-label">Semana 1</div>
+    <h2>Lista de la compra</h2>
+    <p style="font-size:14px; color:var(--gris-medio); margin-bottom:20px;">Cantidades para 2 personas. Pulsa cada artículo para marcarlo.</p>
+
+    <div class="compra-actions-top" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+      <div style="display:flex; align-items:center; gap:10px; flex:1;">
+        <div class="compra-prog-bg" id="compra-prog-bg">
+          <div class="compra-prog-fill" id="compra-prog-fill" style="width:0%"></div>
+        </div>
+        <span style="font-size:12px; color:var(--gris-medio); white-space:nowrap;" id="compra-prog-txt">0 / 0</span>
+      </div>
+      <button class="compra-btn-reset" onclick="resetCompra()">↺ Reiniciar</button>
+    </div>
+
+    <div class="compra-secciones" id="compra-secciones"></div>
+  </section>
+
+  <div style="padding:24px 0; font-size:12px; color:#aaa; text-align:center;">
+    Plan orientativo · Consulta con tu médico si tienes alguna condición preexistente
+  </div>
+</div>
+
+<script type="module">
+// ── FIREBASE ──────────────────────────────────────────────
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBsrBDO4Zqbjsu_uyMdvnl3Q8lHA1-zYx0",
+  authDomain: "plan-atpalmar.firebaseapp.com",
+  databaseURL: "https://plan-atpalmar-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "plan-atpalmar",
+  storageBucket: "plan-atpalmar.firebasestorage.app",
+  messagingSenderId: "858949216286",
+  appId: "1:858949216286:web:b805d590b74f332ca3660f"
+};
+const fbApp = initializeApp(firebaseConfig);
+const db = getDatabase(fbApp);
+function fbSet(path, data) { set(ref(db, path), data).catch(e => console.warn(e)); }
+function fbListen(path, cb) { onValue(ref(db, path), snap => cb(snap.val() || {})); }
+// ────────────────────────────────────────────────────────────
+
+const PLAN = {
+  1: { semanas: [
+    { label: "Semana 1", key: "s1", dias: [
+      { nombre: "Lunes",     tipo: "cardio",   texto: "Natación 30 min continuo · ritmo cómodo, estilo libre" },
+      { nombre: "Martes",    tipo: "fuerza",   texto: "Pesas · circuito completo (3 series, pesos ligeros, técnica)" },
+      { nombre: "Miércoles", tipo: "descanso", texto: "Descanso activo — paseo 30 min o estiramientos" },
+      { nombre: "Jueves",    tipo: "cardio",   texto: "Running 20 min · trote muy suave, sin ahogarse" },
+      { nombre: "Viernes",   tipo: "fuerza",   texto: "Pesas · mismo circuito, sube peso si la técnica es buena" },
+      { nombre: "Sábado",    tipo: "descanso", texto: "Descanso total o estiramientos 15 min" },
+      { nombre: "Domingo",   tipo: "descanso", texto: "Descanso total" }
+    ]},
+    { label: "Semana 2", key: "s2", dias: [
+      { nombre: "Lunes",     tipo: "cardio",   texto: "Running 25 min · mismo ritmo suave" },
+      { nombre: "Martes",    tipo: "fuerza",   texto: "Pesas · sube ligeramente el peso si la semana anterior fue bien" },
+      { nombre: "Miércoles", tipo: "descanso", texto: "Descanso activo — paseo o bici suave" },
+      { nombre: "Jueves",    tipo: "cardio",   texto: "Natación 35 min · puedes añadir 2 largos más rápidos" },
+      { nombre: "Viernes",   tipo: "fuerza",   texto: "Pesas · circuito completo" },
+      { nombre: "Sábado",    tipo: "descanso", texto: "Descanso total" },
+      { nombre: "Domingo",   tipo: "descanso", texto: "Descanso total" }
+    ]}
+  ]},
+  2: { semanas: [
+    { label: "Semana 3", key: "s3", dias: [
+      { nombre: "Lunes",     tipo: "cardio",   texto: "Natación 40 min · 4×100m con 20 seg de pausa entre series" },
+      { nombre: "Martes",    tipo: "fuerza",   texto: "Pesas · aumenta series a 4 en pierna (sentadilla + zancada)" },
+      { nombre: "Miércoles", tipo: "cardio",   texto: "Running 30 min · trote + 3 min a ritmo más vivo" },
+      { nombre: "Jueves",    tipo: "descanso", texto: "Descanso activo — movilidad de cadera y tobillo" },
+      { nombre: "Viernes",   tipo: "fuerza",   texto: "Pesas · circuito completo · pausa 60 seg entre series" },
+      { nombre: "Sábado",    tipo: "cardio",   texto: "Natación o running suave 25 min opcional" },
+      { nombre: "Domingo",   tipo: "descanso", texto: "Descanso total" }
+    ]},
+    { label: "Semana 4", key: "s4", dias: [
+      { nombre: "Lunes",     tipo: "fuerza",   texto: "Pesas · circuito + 10 min de core intenso al final" },
+      { nombre: "Martes",    tipo: "cardio",   texto: "Running 30 min · fartlek: 1 min rápido / 2 min suave × 5" },
+      { nombre: "Miércoles", tipo: "descanso", texto: "Descanso activo" },
+      { nombre: "Jueves",    tipo: "cardio",   texto: "Natación 40 min · 4×100m + 2×50m rápidos" },
+      { nombre: "Viernes",   tipo: "fuerza",   texto: "Pesas · aumenta peso 5–10% respecto semana 3" },
+      { nombre: "Sábado",    tipo: "mixto",    texto: "Sesión mixta: 15 min running + 20 min piscina" },
+      { nombre: "Domingo",   tipo: "descanso", texto: "Descanso total" }
+    ]},
+    { label: "Semana 5", key: "s5", dias: [
+      { nombre: "Lunes",     tipo: "cardio",   texto: "Running 35 min · fartlek 6 repeticiones" },
+      { nombre: "Martes",    tipo: "fuerza",   texto: "Pesas · circuito completo a plena carga" },
+      { nombre: "Miércoles", tipo: "descanso", texto: "Descanso — estiramientos profundos, isquios y cuádriceps" },
+      { nombre: "Jueves",    tipo: "cardio",   texto: "Natación 40 min · 6×50m sprints + 10 min regenerativo" },
+      { nombre: "Viernes",   tipo: "fuerza",   texto: "Pesas · énfasis en piernas · añade saltos de caja si puedes" },
+      { nombre: "Sábado",    tipo: "descanso", texto: "Descanso activo" },
+      { nombre: "Domingo",   tipo: "descanso", texto: "Descanso total" }
+    ]}
+  ]},
+  3: { semanas: [
+    { label: "Semana 6", key: "s6", dias: [
+      { nombre: "Lunes",     tipo: "fuerza",   texto: "Pesas · sesión de fuerza explosiva (series más cortas, más rápidas)" },
+      { nombre: "Martes",    tipo: "cardio",   texto: "Running 30 min con sprints: 10×20m al 90% + vuelta calma" },
+      { nombre: "Miércoles", tipo: "descanso", texto: "Descanso activo — paseo o natación regenerativa 20 min" },
+      { nombre: "Jueves",    tipo: "futbol",   texto: "⚽ Si hay entrenamiento de equipo, úsalo como sesión cardio" },
+      { nombre: "Viernes",   tipo: "fuerza",   texto: "Pesas · sesión corta 45 min · prioriza pierna y core" },
+      { nombre: "Sábado",    tipo: "cardio",   texto: "Natación 30 min regenerativa para recuperar piernas" },
+      { nombre: "Domingo",   tipo: "descanso", texto: "Descanso total" }
+    ]},
+    { label: "Semana 7", key: "s7", dias: [
+      { nombre: "Lunes",     tipo: "fuerza",   texto: "Pesas · sesión ligera de mantenimiento, no al fallo" },
+      { nombre: "Martes",    tipo: "cardio",   texto: "Running 25 min · ritmo de partido: arranques y paradas" },
+      { nombre: "Miércoles", tipo: "descanso", texto: "Descanso total — recuperación completa" },
+      { nombre: "Jueves",    tipo: "futbol",   texto: "⚽ Entrenamiento de equipo / rondo / táctica" },
+      { nombre: "Viernes",   tipo: "descanso", texto: "Descanso o 20 min natación muy suave" },
+      { nombre: "Sábado",    tipo: "futbol",   texto: "⚽ PRIMER PARTIDO DE PRETEMPORADA 🎉" },
+      { nombre: "Domingo",   tipo: "descanso", texto: "Descanso total · felicidades, lo conseguiste" }
+    ]}
+  ]}
+};
+
+// Estado en memoria
+let completados = {};
+let faseActual = 1;
+let semanaActualKey = 's1';
+const TOTAL_DIAS = 49;
+
+function cargarCompletados() {
+  fbListen('completados', data => {
+    completados = data;
+    actualizarTodo();
+    renderDiasConEstado(semanaActualKey);
+  });
+}
+
+function guardarCompletados() {
+  fbSet('completados', completados);
+}
+
+function diaId(semanaKey, diaIndex) {
+  return semanaKey + '-d' + diaIndex;
+}
+
+function toggleDia(semanaKey, diaIndex) {
+  const id = diaId(semanaKey, diaIndex);
+  completados[id] = !completados[id];
+  guardarCompletados();
+  actualizarTodo();
+  // Re-renderizar la vista actual sin cambiar de semana
+  renderDiasConEstado(semanaKey);
+}
+
+function getSemanaCompletados(semanaKey) {
+  let total = 0, hecho = 0;
+  for (let fase = 1; fase <= 3; fase++) {
+    for (const s of PLAN[fase].semanas) {
+      if (s.key === semanaKey) {
+        total = s.dias.length;
+        s.dias.forEach((_, i) => { if (completados[diaId(semanaKey, i)]) hecho++; });
+        break;
+      }
+    }
+  }
+  return { total, hecho };
+}
+
+function getFaseCompletados(faseNum) {
+  let total = 0, hecho = 0;
+  for (const s of PLAN[faseNum].semanas) {
+    s.dias.forEach((_, i) => { if (completados[diaId(s.key, i)]) hecho++; total++; });
+  }
+  return { total, hecho };
+}
+
+function getTotalCompletados() {
+  let hecho = 0;
+  for (let f = 1; f <= 3; f++) {
+    for (const s of PLAN[f].semanas) {
+      s.dias.forEach((_, i) => { if (completados[diaId(s.key, i)]) hecho++; });
+    }
+  }
+  return hecho;
+}
+
+function actualizarTodo() {
+  // Hero progress
+  const totalHecho = getTotalCompletados();
+  const pct = Math.round((totalHecho / TOTAL_DIAS) * 100);
+  document.getElementById('hero-progress-pct').textContent = pct + '%';
+  document.getElementById('hero-progress-fill').style.width = pct + '%';
+  document.getElementById('hero-progress-sub').textContent = totalHecho + ' de ' + TOTAL_DIAS + ' días completados';
+
+  // Fase badges
+  for (let f = 1; f <= 3; f++) {
+    const { total, hecho } = getFaseCompletados(f);
+    const el = document.getElementById('fase-prog-' + f);
+    if (hecho === 0) {
+      el.textContent = '';
+    } else if (hecho === total) {
+      el.textContent = '✓ Fase completada';
+    } else {
+      el.textContent = hecho + ' / ' + total + ' días hechos';
+    }
+  }
+
+  // Tab checks (si el DOM ya está renderizado)
+  document.querySelectorAll('.semana-tab').forEach(tab => {
+    const key = tab.dataset.key;
+    if (!key) return;
+    const { total, hecho } = getSemanaCompletados(key);
+    if (hecho > 0) tab.classList.add('tiene-completados');
+    else tab.classList.remove('tiene-completados');
+  });
+
+  // Semana progress bar
+  const spb = document.getElementById('semana-progress-fill');
+  const spl = document.getElementById('semana-progress-label');
+  if (spb && spl && semanaActualKey) {
+    const { total, hecho } = getSemanaCompletados(semanaActualKey);
+    const spct = total > 0 ? Math.round((hecho / total) * 100) : 0;
+    spb.style.width = spct + '%';
+    spl.textContent = hecho + '/' + total + ' días';
+  }
+}
+
+function mostrarFase(num, el) {
+  faseActual = num;
+  document.querySelectorAll('.fase').forEach(f => f.classList.remove('active'));
+  el.classList.add('active');
+  renderSemanas(num);
+}
+
+function renderSemanas(num) {
+  const datos = PLAN[num];
+  const tabsContainer = document.getElementById('tabs-container');
+
+  tabsContainer.innerHTML = '';
+  datos.semanas.forEach((s, i) => {
+    const tab = document.createElement('div');
+    tab.className = 'semana-tab' + (i === 0 ? ' active' : '');
+    tab.dataset.key = s.key;
+    tab.innerHTML = s.label + '<span class="tab-check">✓</span>';
+
+    const { hecho } = getSemanaCompletados(s.key);
+    if (hecho > 0) tab.classList.add('tiene-completados');
+
+    tab.onclick = () => {
+      document.querySelectorAll('.semana-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      semanaActualKey = s.key;
+      renderDiasConEstado(s.key);
+    };
+    tabsContainer.appendChild(tab);
+  });
+
+  semanaActualKey = datos.semanas[0].key;
+  renderDiasConEstado(datos.semanas[0].key);
+}
+
+function renderDiasConEstado(semanaKey) {
+  const content = document.getElementById('semana-content');
+  const badgeMap = {
+    cardio:   ['badge-cardio',   'CARDIO'],
+    fuerza:   ['badge-fuerza',   'FUERZA'],
+    descanso: ['badge-descanso', 'DESCANSO'],
+    futbol:   ['badge-futbol',   'FÚTBOL'],
+    mixto:    ['badge-mixto',    'MIXTO']
+  };
+
+  let dias = null;
+  for (let f = 1; f <= 3; f++) {
+    for (const s of PLAN[f].semanas) {
+      if (s.key === semanaKey) { dias = s.dias; break; }
+    }
+  }
+  if (!dias) return;
+
+  const { total, hecho } = getSemanaCompletados(semanaKey);
+  const spct = total > 0 ? Math.round((hecho / total) * 100) : 0;
+
+  let html = `<div class="semana-progress">
+    <span style="font-size:12px;color:var(--gris-medio);white-space:nowrap;">Semana completada</span>
+    <div class="semana-progress-bar-bg">
+      <div class="semana-progress-bar-fill" id="semana-progress-fill" style="width:${spct}%"></div>
+    </div>
+    <span class="semana-progress-label" id="semana-progress-label">${hecho}/${total} días</span>
+  </div>`;
+
+  html += dias.map((d, i) => {
+    const id = diaId(semanaKey, i);
+    const done = !!completados[id];
+    const [cls, label] = badgeMap[d.tipo] || ['badge-descanso', d.tipo.toUpperCase()];
+    return `
+      <div class="dia-row ${done ? 'completado' : ''}" id="row-${id}">
+        <div class="dia-nombre">${d.nombre}</div>
+        <div class="dia-ejercicio">
+          <span class="tipo-badge ${cls}">${label}</span>
+          <span class="dia-texto">${d.texto}</span>
+        </div>
+        <button class="btn-check" onclick="toggleDia('${semanaKey}', ${i})" title="${done ? 'Marcar como pendiente' : 'Marcar como completado'}">
+          <div class="check-circle">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.5 7L5.5 10L11.5 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </button>
+      </div>`;
+  }).join('');
+
+  content.innerHTML = html;
+}
+
+// ── DIETA SEMANAL ──────────────────────────────────────────
+// Entreno en ayunas a las 7h · desayuno post-entreno clave · cena anterior = combustible
+const DIETA = [
+  { nombre: "Lunes", tipo: "entreno", kcal: 2200,
+    comidas: [
+      { label: "7:00h",      main: "🏊 Entreno en ayunas", alt: "Natación / running / pesas según el plan", kcal: 0 },
+      { label: "Desayuno",   main: "3 huevos revueltos + 2 tostadas integrales con tomate + café", alt: "⚡ Post-entreno — en los primeros 40 min", kcal: 500 },
+      { label: "Almuerzo",   main: "Arroz con pollo al horno (200g pechuga) + ensalada verde", alt: "Pieza de fruta", kcal: 650 },
+      { label: "Merienda",   main: "Yogur griego natural + 1 fruta", alt: "", kcal: 180 },
+      { label: "Cena",       main: "Merluza al horno (200g) + 2 patatas medianas + verduras", alt: "🌙 Hidrato en cena = combustible para mañana", kcal: 580 }
+    ], macros: { p: 158, c: 215, g: 55 }
+  },
+  { nombre: "Martes", tipo: "entreno", kcal: 2200,
+    comidas: [
+      { label: "7:00h",      main: "🏋️ Entreno en ayunas", alt: "Natación / running / pesas según el plan", kcal: 0 },
+      { label: "Desayuno",   main: "Porridge de avena (70g) con leche + plátano + 2 huevos cocidos", alt: "⚡ Post-entreno — proteína + hidrato juntos", kcal: 530 },
+      { label: "Almuerzo",   main: "Lentejas con verduras (ración generosa) + pan integral", alt: "Naranja de postre", kcal: 620 },
+      { label: "Merienda",   main: "Queso fresco 0% (200g) + 1 cucharada de miel", alt: "", kcal: 190 },
+      { label: "Cena",       main: "Filete de ternera (150g) a la plancha + patatas al vapor + tomate", alt: "🌙 No escatimes en hidrato si entrenas mañana", kcal: 570 }
+    ], macros: { p: 162, c: 210, g: 52 }
+  },
+  { nombre: "Miércoles", tipo: "descanso", kcal: 2000,
+    comidas: [
+      { label: "Desayuno",   main: "Tortilla francesa (2 huevos) + 1 tostada integral con aceite de oliva", alt: "Café con leche · sin prisa, no hay entreno", kcal: 380 },
+      { label: "Almuerzo",   main: "Ensalada de garbanzos con atún, tomate, pepino y huevo duro", alt: "Pan integral (40g)", kcal: 560 },
+      { label: "Merienda",   main: "Manzana + 30g de jamón serrano", alt: "", kcal: 160 },
+      { label: "Cena",       main: "Crema de verduras + 150g de salmón al horno + arroz (60g)", alt: "🌙 Añade hidrato si mañana entrenas", kcal: 580 }
+    ], macros: { p: 145, c: 180, g: 58 }
+  },
+  { nombre: "Jueves", tipo: "entreno", kcal: 2200,
+    comidas: [
+      { label: "7:00h",      main: "🏊 Entreno en ayunas", alt: "Natación / running / pesas según el plan", kcal: 0 },
+      { label: "Desayuno",   main: "2 tostadas integrales con aguacate (½) + 3 lonchas de pavo + 2 huevos", alt: "⚡ Post-entreno — no lo saltes", kcal: 520 },
+      { label: "Almuerzo",   main: "Pasta integral (80g seca) con tomate, atún y aceitunas", alt: "Pieza de fruta", kcal: 640 },
+      { label: "Merienda",   main: "Yogur proteico + fruta", alt: "", kcal: 180 },
+      { label: "Cena",       main: "Pechuga de pollo a la plancha (200g) + patatas al vapor + pimientos", alt: "🌙 Hidrato en cena para el entreno de mañana", kcal: 580 }
+    ], macros: { p: 160, c: 220, g: 50 }
+  },
+  { nombre: "Viernes", tipo: "entreno", kcal: 2200,
+    comidas: [
+      { label: "7:00h",      main: "🏋️ Entreno en ayunas", alt: "Natación / running / pesas según el plan", kcal: 0 },
+      { label: "Desayuno",   main: "Yogur griego natural (200g) + 50g de avena + kiwi + 2 huevos duros", alt: "⚡ Post-entreno completo: proteína + hidrato", kcal: 540 },
+      { label: "Almuerzo",   main: "Arroz con verduras y huevo (2 huevos) a la sartén", alt: "Naranja de postre", kcal: 620 },
+      { label: "Merienda",   main: "30g frutos secos + 1 fruta", alt: "", kcal: 200 },
+      { label: "Cena",       main: "Dorada al horno (200g) + patata y verduras al horno", alt: "🌙 Fin de semana — cena más tranquila", kcal: 550 }
+    ], macros: { p: 155, c: 218, g: 57 }
+  },
+  { nombre: "Sábado", tipo: "descanso", kcal: 2000,
+    comidas: [
+      { label: "Desayuno",   main: "Tostadas con tomate y aceite de oliva + 2 huevos cocidos", alt: "Café con leche · sin prisa", kcal: 390 },
+      { label: "Almuerzo",   main: "Pollo asado (200g) + ensalada campera (patata, tomate, cebolla, huevo)", alt: "Pan integral", kcal: 640 },
+      { label: "Merienda",   main: "Fruta de temporada + 20g frutos secos", alt: "", kcal: 170 },
+      { label: "Cena",       main: "Tortilla española (3 huevos) + ensalada verde + pan integral", alt: "🌙 Si entrenas el domingo, no olvides el hidrato", kcal: 530 }
+    ], macros: { p: 140, c: 182, g: 60 }
+  },
+  { nombre: "Domingo", tipo: "descanso", kcal: 2000,
+    comidas: [
+      { label: "Desayuno",   main: "Porridge de avena (60g) + fruta + café", alt: "Puedes añadir canela o miel", kcal: 380 },
+      { label: "Almuerzo",   main: "Cocido ligero: garbanzos, pollo, verduras (sin embutidos)", alt: "Pieza de fruta", kcal: 680 },
+      { label: "Merienda",   main: "Yogur natural + 1 fruta", alt: "", kcal: 150 },
+      { label: "Cena",       main: "Revuelto de champiñones y espárragos (2 huevos) + 2 tostadas integrales", alt: "🌙 Cena clave: mañana lunes vuelve el entreno", kcal: 480 }
+    ], macros: { p: 132, c: 188, g: 57 }
+  }
+];
+
+let dietaIdx = 0;
+let expandido = null;
+
+// Recetas hardcoded por clave "diaIdx-comidaIdx"
+const RECETAS = {
+  // LUNES
+  "0-1": { tiempo: "10 min", pasos: ["Bate 3 huevos con sal y pimienta.", "Cocínalos a fuego medio removiendo despacio hasta que cuajen cremosos.", "Tuesta el pan y frótalo con tomate maduro y un chorrito de aceite.", "Sirve los huevos sobre las tostadas y acompaña con el café."], tip: "No subas el fuego: los huevos revueltos quedan mejor lentos y a baja temperatura." },
+  "0-2": { tiempo: "35 min", pasos: ["Salpimienta la pechuga y hornéala a 200°C 25 min, dándole la vuelta a mitad.", "Cuece el arroz en agua con sal según el paquete (unos 12 min).", "Prepara la ensalada con lechuga, tomate y pepino, aliña con aceite y limón.", "Sirve el arroz con el pollo en lonchas encima."], tip: "Si horneas doble de pollo, tienes proteína para el día siguiente sin esfuerzo." },
+  "0-3": { tiempo: "2 min", pasos: ["Pon el yogur griego en un bol.", "Añade la fruta troceada encima.", "Opcional: un chorrito de miel o canela."], tip: "El yogur griego tiene el doble de proteína que el normal, elige sin azúcares añadidos." },
+  "0-4": { tiempo: "25 min", pasos: ["Precalienta el horno a 200°C. Coloca la merluza en bandeja con sal, limón y un chorro de aceite.", "Pela y trocea las patatas, ponlas en el horno 10 min antes que el pescado.", "Añade verduras (calabacín, pimiento) en la misma bandeja. Hornea todo 20 min.", "Sirve directamente de la bandeja."], tip: "La merluza está lista cuando la carne se separa fácilmente con un tenedor." },
+  // MARTES
+  "1-1": { tiempo: "10 min", pasos: ["Calienta la leche sin hervir y añade la avena. Remueve 3-4 min a fuego medio.", "Añade el plátano troceado encima del porridge ya en el bol.", "Cuece los huevos 8 min en agua hirviendo, pélalos y sírvelos al lado.", "Añade canela al porridge si quieres."], tip: "Prepara los huevos la noche anterior y guárdalos en la nevera para ganar tiempo." },
+  "1-2": { tiempo: "30 min", pasos: ["Sofríe cebolla, ajo, zanahoria y pimiento en aceite 5 min.", "Añade las lentejas (ya cocidas o de bote escurridas) y caldo. Cuece 15 min.", "Añade pimentón y sal al gusto. Ajusta la textura con más caldo si hace falta.", "Sirve con una rebanada de pan integral."], tip: "Las lentejas de bote ahorran 20 min: solo escúrrelas y enjuágalas bien." },
+  "1-3": { tiempo: "1 min", pasos: ["Pon el queso fresco en un bol o plato.", "Vierte una cucharada de miel por encima.", "Listo para comer."], tip: "El queso fresco 0% es una de las mejores fuentes de proteína por caloría que existen." },
+  "1-4": { tiempo: "20 min", pasos: ["Pela y trocea las patatas, cuécelas al vapor o en agua 15 min hasta que estén blandas.", "Calienta la plancha a fuego fuerte. Salpimenta el filete y cocínalo 2-3 min por lado.", "Corta el tomate en rodajas, aliña con aceite, sal y orégano.", "Sirve todo junto en el plato."], tip: "Deja reposar el filete 2 min antes de cortarlo para que los jugos no se escapen." },
+  // MIÉRCOLES
+  "2-0": { tiempo: "8 min", pasos: ["Bate 2 huevos con sal y un chorrito de leche.", "Calienta una sartén con unas gotas de aceite a fuego medio.", "Vierte los huevos y deja que cuajen sin remover, doblando la tortilla a la mitad.", "Sirve con la tostada con aceite de oliva."], tip: "Para una tortilla francesa perfecta, el fuego debe ser medio-bajo y la sartén bien caliente antes." },
+  "2-1": { tiempo: "10 min", pasos: ["Escurre y enjuaga los garbanzos de bote.", "Trocea tomate, pepino y cebolleta. Mezcla con los garbanzos y el atún escurrido.", "Añade el huevo duro en rodajas por encima.", "Aliña con aceite, vinagre y sal."], tip: "Prepara esta ensalada la noche anterior y guárdala sin aliñar para que no se ablande." },
+  "2-2": { tiempo: "2 min", pasos: ["Lava la manzana y córtala en gajos.", "Sirve con las lonchas de jamón al lado."], tip: "El jamón serrano tiene más proteína por ración de lo que parece, perfecto como snack." },
+  "2-3": { tiempo: "30 min", pasos: ["Sofríe cebolla, calabacín, puerro y zanahoria. Añade caldo y cuece 20 min. Tritura.", "Coloca el salmón en bandeja con sal, limón y eneldo. Hornea a 200°C 15 min.", "Cuece el arroz en agua con sal según el paquete.", "Sirve la crema en bol, el salmón encima y el arroz al lado."], tip: "El salmón está listo cuando cambia de color naranja vivo a rosado opaco por dentro." },
+  // JUEVES
+  "3-1": { tiempo: "12 min", pasos: ["Tuesta el pan integral y úntalo con el aguacate chafado con sal y limón.", "Añade las lonchas de pavo encima del aguacate.", "Fríe o escalfa los 2 huevos y colócalos encima.", "Sirve inmediatamente."], tip: "El aguacate se oxida rápido: añade limón nada más chafarlo para que no ennegrezca." },
+  "3-2": { tiempo: "20 min", pasos: ["Cuece la pasta integral según el paquete (suele ser 10-12 min).", "Escurre la pasta y mézclala con tomate triturado natural en frío.", "Añade el atún escurrido y las aceitunas troceadas.", "Aliña con aceite de oliva y sal."], tip: "Esta pasta está igual de buena fría: prepárala por la noche y llévala de tupper." },
+  "3-3": { tiempo: "2 min", pasos: ["Pon el yogur proteico en un bol.", "Añade la fruta troceada encima.", "Opcional: semillas de chía o un puñado de granola sin azúcar."], tip: "Los yogures proteicos de marca blanca tienen la misma calidad que los de marca y cuestan la mitad." },
+  "3-4": { tiempo: "20 min", pasos: ["Trocea las patatas y cuécelas al vapor 15 min.", "Calienta la plancha fuerte, salpimenta la pechuga y cocínala 4-5 min por lado.", "Asa los pimientos en la misma plancha 3 min por lado.", "Sirve todo en el plato con un chorrito de aceite."], tip: "Golpea la pechuga con film hasta igualar el grosor: se cocinará uniforme y quedará más jugosa." },
+  // VIERNES
+  "4-1": { tiempo: "12 min", pasos: ["Cuece los huevos 8 min, enfríalos en agua fría y pélalos.", "Calienta la leche, añade la avena y remueve 3-4 min hasta que espese.", "Sirve el porridge en un bol con el kiwi troceado encima.", "Pon los huevos cocidos al lado, partidos por la mitad con sal."], tip: "La avena en copos finos se hace más rápido que la gruesa y queda igual de bien." },
+  "4-2": { tiempo: "20 min", pasos: ["Cuece el arroz en agua con sal. Reserva.", "Sofríe cebolla, pimiento y calabacín en aceite 5 min.", "Añade el arroz cocido a la sartén, mezcla y haz un hueco para los huevos.", "Rompe los huevos en el hueco, remueve todo y sirve."], tip: "Este arroz es perfecto para usar verduras que tengas en la nevera a punto de pasarse." },
+  "4-3": { tiempo: "1 min", pasos: ["Pesa 30g de frutos secos (un puñado pequeño).", "Sirve con la fruta que tengas a mano."], tip: "Los frutos secos son muy calóricos: pésalos al principio hasta que tengas ojo en la ración." },
+  "4-4": { tiempo: "30 min", pasos: ["Precalienta el horno a 200°C.", "Trocea las patatas y las verduras (calabacín, tomate cherry). Ponlas en bandeja con aceite y sal.", "Hornea las verduras 15 min, luego coloca la dorada encima con limón y tomillo.", "Hornea 15 min más hasta que el pescado esté hecho."], tip: "Pide en la pescadería que te abran la dorada por la mitad: se hornea más rápido y uniforme." },
+  // SÁBADO
+  "5-0": { tiempo: "8 min", pasos: ["Tuesta el pan, frótalo con tomate maduro cortado y un chorrito de aceite.", "Cuece los huevos 8 min en agua hirviendo. Pélalos y córtalos en mitades.", "Sirve las tostadas con los huevos al lado.", "Acompaña con café con leche."], tip: "Los huevos cocidos duran 5 días en la nevera con cáscara: cuece varios de golpe." },
+  "5-1": { tiempo: "60 min", pasos: ["Salpimienta el pollo (contramuslos o pechuga) y hornéalo a 200°C unos 40-45 min.", "Cuece una patata mediana, déjala enfriar y trocéala.", "Mezcla la patata con tomate, cebolla, huevo duro y aceitunas. Aliña con aceite y vinagre.", "Sirve el pollo con la ensalada campera al lado."], tip: "El contramuslo queda más jugoso que la pechuga al horno y es más barato." },
+  "5-2": { tiempo: "2 min", pasos: ["Pela o lava la fruta de temporada y trocéala.", "Sirve con los frutos secos al lado en un bol pequeño."], tip: "En julio/agosto: melocotón, nectarina, sandía y melón son ideales y muy económicos." },
+  "5-3": { tiempo: "20 min", pasos: ["Pela y trocea 2 patatas medianas, fríelas en aceite a fuego medio hasta que estén blandas.", "Bate 3 huevos con sal, añade las patatas escurridas y mezcla.", "Vierte en sartén antiadherente con poco aceite, cuaja 3 min por cada lado.", "Sirve con la ensalada verde aliñada al lado."], tip: "Deja reposar la tortilla 5 min antes de cortarla: se asienta y se corta mucho mejor." },
+  // DOMINGO
+  "6-0": { tiempo: "8 min", pasos: ["Calienta la leche sin hervir y añade 60g de avena. Remueve 3-4 min.", "Sirve en un bol y añade la fruta troceada encima.", "Espolvorea canela o añade un chorrito de miel.", "Acompaña con el café."], tip: "El domingo es buen día para preparar avena overnight: mézclala con leche la noche anterior y lista." },
+  "6-1": { tiempo: "45 min", pasos: ["Sofríe cebolla, ajo y pimiento en aceite. Añade los garbanzos de bote escurridos.", "Añade el pollo troceado (o usa restos del día anterior) y caldo de pollo.", "Incorpora zanahoria, patata y judías verdes. Cuece todo 25 min.", "Ajusta de sal y sirve en bol hondo."], tip: "Con restos de pollo asado del sábado este cocido sale en 20 minutos." },
+  "6-2": { tiempo: "2 min", pasos: ["Pon el yogur natural en un bol.", "Añade la fruta troceada encima.", "Opcional: una cucharadita de miel."], tip: "Elige yogur natural sin azúcares añadidos, no el edulcorado ni el de sabores." },
+  "6-3": { tiempo: "10 min", pasos: ["Limpia y lamina los champiñones. Trocea los espárragos en trozos de 3 cm.", "Saltéalos en sartén con aceite y ajo picado 4-5 min a fuego fuerte.", "Bate 2 huevos, viértelos en la sartén y remueve suavemente hasta que cuajen.", "Sirve con las tostadas integrales."], tip: "No tapes los champiñones al saltear: sueltan agua y necesitan evaporarla para dorarse bien." }
+};
+
+function toggleReceta(di, ci) {
+  const key = `${di}-${ci}`;
+  expandido = (expandido === key) ? null : key;
+  renderDieta();
+}
+
+function renderDieta() {
+  const tabsEl = document.getElementById('diet-tabs');
+  const cardEl = document.getElementById('diet-card');
+  if (!tabsEl || !cardEl) return;
+
+  tabsEl.innerHTML = DIETA.map((d, i) => `
+    <button class="diet-tab ${i === dietaIdx ? 'active' : ''}" onclick="setDieta(${i})">
+      <span class="ddot ${d.tipo === 'entreno' ? 'ddot-entreno' : 'ddot-descanso'}"></span>${d.nombre}
+    </button>`).join('');
+
+  const d = DIETA[dietaIdx];
+
+  let html = `
+    <div class="diet-header">
+      <div>
+        <span class="diet-title">${d.nombre}</span>
+        <span class="diet-kcal"> · ${d.kcal} kcal</span>
+      </div>
+      <span class="diet-tipo ${d.tipo === 'entreno' ? 'diet-tipo-entreno' : 'diet-tipo-descanso'}">${d.tipo === 'entreno' ? 'Día de entreno' : 'Día de descanso'}</span>
+    </div>`;
+
+  d.comidas.forEach((c, ci) => {
+    const esEntreno = c.kcal === 0;
+    const key = `${dietaIdx}-${ci}`;
+    const abierto = expandido === key;
+    const r = RECETAS[key];
+
+    html += `
+    <div class="meal-row ${abierto ? 'meal-open' : ''}" style="${esEntreno ? 'background:#f0faf4;' : ''}">
+      <div class="meal-label" style="${esEntreno ? 'color:var(--verde);font-weight:600;' : ''}">${c.label}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="meal-main" style="${esEntreno ? 'color:var(--cesped);' : ''}">${c.main}</div>
+        ${c.alt ? `<div class="meal-alt">${c.alt}</div>` : ''}
+        ${abierto && r ? `
+        <div class="receta-box">
+          <div class="receta-tiempo">⏱ ${r.tiempo}</div>
+          <ol class="receta-pasos">${r.pasos.map(p => `<li>${p}</li>`).join('')}</ol>
+          ${r.tip ? `<div class="receta-tip">💡 ${r.tip}</div>` : ''}
+        </div>` : ''}
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+        <div class="meal-kcal">${esEntreno ? '' : '~' + c.kcal + ' kcal'}</div>
+        ${!esEntreno ? `<button class="btn-receta" onclick="toggleReceta(${dietaIdx},${ci})">
+          ${abierto ? '▲ cerrar' : '▼ receta'}
+        </button>` : ''}
+      </div>
+    </div>`;
+  });
+
+  html += `
+    <div class="diet-macros">
+      <div class="diet-macro-item"><span class="diet-macro-dot" style="background:var(--azul)"></span><strong>${d.macros.p}g</strong> proteína</div>
+      <div class="diet-macro-item"><span class="diet-macro-dot" style="background:var(--naranja)"></span><strong>${d.macros.c}g</strong> carbohidratos</div>
+      <div class="diet-macro-item"><span class="diet-macro-dot" style="background:var(--verde-claro)"></span><strong>${d.macros.g}g</strong> grasas</div>
+    </div>`;
+
+  cardEl.innerHTML = html;
+}
+
+function setDieta(i) { dietaIdx = i; expandido = null; renderDieta(); }
+
+renderDieta();
+
+// ── LISTA DE LA COMPRA ─────────────────────────────────────
+const COMPRA = [
+  { sec: "Proteínas", items: [
+    { n: "Pechuga de pollo", q: "800g" },
+    { n: "Filete de ternera", q: "300g" },
+    { n: "Merluza", q: "400g (o lomos congelados)" },
+    { n: "Salmón", q: "300g" },
+    { n: "Atún en lata", q: "6 latas (80g c/u)" },
+    { n: "Huevos", q: "30 uds (2 docenas y media)" },
+    { n: "Jamón serrano", q: "100g en lonchas" },
+    { n: "Pavo en lonchas", q: "200g" },
+  ]},
+  { sec: "Lácteos", items: [
+    { n: "Leche semidesnatada", q: "2 litros" },
+    { n: "Yogur griego natural (sin azúcar)", q: "8 uds" },
+    { n: "Yogur natural", q: "4 uds" },
+    { n: "Queso fresco 0%", q: "800g (4 tarrinas)" },
+  ]},
+  { sec: "Verduras y hortalizas", items: [
+    { n: "Lechuga o mezclum", q: "2 bolsas" },
+    { n: "Tomates", q: "2 kg" },
+    { n: "Pepino", q: "2 uds" },
+    { n: "Pimientos (rojo y verde)", q: "4 uds" },
+    { n: "Cebolla", q: "6 uds" },
+    { n: "Ajo", q: "1 cabeza" },
+    { n: "Calabacín", q: "4 uds" },
+    { n: "Zanahoria", q: "6 uds" },
+    { n: "Puerro", q: "2 uds" },
+    { n: "Champiñones", q: "400g" },
+    { n: "Espárragos verdes", q: "2 manojos" },
+    { n: "Judías verdes", q: "200g" },
+  ]},
+  { sec: "Frutas", items: [
+    { n: "Plátanos", q: "8 uds" },
+    { n: "Naranjas", q: "8 uds" },
+    { n: "Manzanas", q: "6 uds" },
+    { n: "Kiwi", q: "4 uds" },
+    { n: "Fruta de temporada", q: "a elección (melocotón, sandía...)" },
+  ]},
+  { sec: "Hidratos y cereales", items: [
+    { n: "Arroz (redondo o largo)", q: "1 kg" },
+    { n: "Pasta integral", q: "1 kg" },
+    { n: "Avena en copos", q: "750g" },
+    { n: "Pan integral de molde o barra", q: "2 paquetes / barras" },
+  ]},
+  { sec: "Legumbres y conservas", items: [
+    { n: "Garbanzos cocidos (bote)", q: "2 botes (400g c/u)" },
+    { n: "Lentejas cocidas (bote)", q: "2 botes (400g c/u)" },
+    { n: "Tomate triturado natural", q: "2 botes" },
+    { n: "Aceitunas", q: "bote mediano" },
+  ]},
+  { sec: "Patatas", items: [
+    { n: "Patatas", q: "2 kg" },
+  ]},
+  { sec: "Despensa y condimentos", items: [
+    { n: "Aceite de oliva virgen extra", q: "si no tienes" },
+    { n: "Sal y pimienta negra", q: "si no tienes" },
+    { n: "Limón", q: "6 uds" },
+    { n: "Miel", q: "tarro pequeño" },
+    { n: "Pimentón dulce", q: "si no tienes" },
+    { n: "Frutos secos (nueces o almendras)", q: "200g" },
+    { n: "Caldo de pollo (brick o pastillas)", q: "2 litros o 8 pastillas" },
+  ]},
+];
+
+let compraState = {};
+
+function cargarCompra() {
+  fbListen('compra', data => {
+    compraState = data;
+    renderCompra();
+  });
+}
+
+function guardarCompra() {
+  fbSet('compra', compraState);
+}
+
+function toggleCompra(si, ii) {
+  const k = si + '-' + ii;
+  compraState[k] = !compraState[k];
+  guardarCompra();
+  renderCompra();
+}
+
+function resetCompra() {
+  compraState = {};
+  guardarCompra();
+  renderCompra();
+}
+
+function renderCompra() {
+  const el = document.getElementById('compra-secciones');
+  const progFill = document.getElementById('compra-prog-fill');
+  const progTxt = document.getElementById('compra-prog-txt');
+  if (!el) return;
+
+  let total = 0, hechos = 0;
+  COMPRA.forEach((s, si) => s.items.forEach((_, ii) => { total++; if (compraState[si+'-'+ii]) hechos++; }));
+  const pct = total > 0 ? Math.round((hechos/total)*100) : 0;
+  if (progFill) progFill.style.width = pct + '%';
+  if (progTxt) progTxt.textContent = hechos + ' / ' + total;
+
+  el.innerHTML = COMPRA.map((s, si) => {
+    const secH = s.items.filter((_, ii) => compraState[si+'-'+ii]).length;
+    return `<div class="compra-sec">
+      <div class="compra-sec-header">
+        <span class="compra-sec-nombre">${s.sec}</span>
+        <span class="compra-sec-count">${secH}/${s.items.length}</span>
+      </div>
+      <ul class="compra-items">${s.items.map((item, ii) => {
+        const done = !!compraState[si+'-'+ii];
+        return `<li class="compra-item${done?' ci-done':''}" onclick="toggleCompra(${si},${ii})">
+          <div class="compra-check"><span class="compra-check-icon">✓</span></div>
+          <div>
+            <div class="compra-item-nombre">${item.n}</div>
+            <div class="compra-item-qty">${item.q}</div>
+          </div>
+        </li>`;
+      }).join('')}</ul>
+    </div>`;
+  }).join('');
+}
+
+cargarCompra();
+
+// ── INICIALIZAR ─────────────────────────────────────────────
+cargarCompletados();
+renderSemanas(1);
+renderDieta();
+
+// Exponer funciones al scope global (necesario con type="module")
+window.mostrarFase = mostrarFase;
+window.toggleDia = toggleDia;
+window.setDieta = setDieta;
+window.toggleReceta = toggleReceta;
+window.toggleCompra = toggleCompra;
+window.resetCompra = resetCompra;
+
+</script>
+</body>
+</html>
