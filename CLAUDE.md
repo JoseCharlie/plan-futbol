@@ -16,9 +16,9 @@ Ya no es una cuenta atrás de 7 semanas/3 fases (esa pretemporada no se complet�
 1. **Firebase init** — conexión a Realtime Database para sincronización entre dispositivos
 2. **PLAN_SEMANA** — los 7 días tipo (Lunes–Domingo) con su tipo de sesión
 3. **Sistema de checks de entreno** — `completados` (por día de la semana, 0–6), `toggleDia()`, `resetSemanaEntreno()` (botón "Reiniciar" manual, no hay fecha de corte automática)
-4. **DIETA_SEMANA** — un único menú semanal con 4 "modos" de día: `propio` (toggle mañana/tarde), `equipo` (horario fijo con snack pre-entreno 19:00h y recuperación ligera a las 23:00h en vez de cena completa), `descanso` (sábado), `variable` (domingo: toggle partido/descanso)
-5. **RECETAS** — indexadas por `"{dia}-{slot}"` (ej. `"lunes-g1"`, `"martes-recup"`, `"domingo-partido-c"`), cada una con `ingredientes` (cantidades para 1 persona) y `pasos`
-6. **COMPRA** — lista de la compra única (no por semana), para 2 personas, cubre toda la semana tipo incluidas ambas variantes del domingo
+4. **DIETA_SEMANAS** — 3 menús distintos (`1`/`2`/`3`, seleccionables con pestañas, para variar) sobre la misma plantilla de 7 días. `DIA_MODO`/`DIA_ICONO` fijan el tipo de cada día (igual en los 3 menús, solo cambian los platos): `propio` (toggle mañana/tarde), `equipo` (horario fijo con snack pre-entreno 19:00h y recuperación ligera a las 23:00h en vez de cena completa), `descanso` (sábado), `variable` (domingo: toggle partido/descanso)
+5. **RECETAS** — indexadas por `"o{opción}-{dia}-{slot}"` (ej. `"o1-lunes-g1"`, `"o2-martes-recup"`, `"o3-domingo-partido-c"`), cada una con `ingredientes` (cantidades para 1 persona) y `pasos`
+6. **COMPRA_OPCIONES** — una lista de la compra por cada menú (`1`/`2`/`3`, con pestañas), para 2 personas, cubre toda la semana tipo incluidas ambas variantes del domingo
 7. **Init** — bloque final que arranca todo y expone funciones a `window.*`
 
 ## Firebase

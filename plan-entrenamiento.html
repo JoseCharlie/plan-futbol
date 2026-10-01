@@ -984,8 +984,9 @@
   <section id="menu">
     <div class="section-label">Nutrición</div>
     <h2>Menú semanal</h2>
-    <p style="font-size:14px; color:var(--gris-medio); margin-bottom:16px;">Una semana tipo que se repite. Lunes, miércoles y viernes puedes elegir si entrenas en ayunas por la mañana o por la tarde. Martes y jueves siguen el horario fijo del equipo (21:30–22:45). El domingo cambia entre "hay partido" y "descanso" según toque. El menú es una guía, no un régimen estricto.</p>
+    <p style="font-size:14px; color:var(--gris-medio); margin-bottom:16px;">Una semana tipo que se repite. 3 menús distintos para variar — cambia entre ellos cuando quieras, no hace falta seguir siempre el mismo. Lunes, miércoles y viernes puedes elegir si entrenas en ayunas por la mañana o por la tarde. Martes y jueves siguen el horario fijo del equipo (21:30–22:45). El domingo cambia entre "hay partido" y "descanso" según toque. El menú es una guía, no un régimen estricto.</p>
 
+    <div class="diet-week-tabs" id="menu-opcion-tabs"></div>
     <div class="diet-tabs" id="diet-tabs"></div>
     <div class="diet-card" id="diet-card"></div>
   </section>
@@ -1021,7 +1022,9 @@
   <section id="compra">
     <div class="section-label">Semana tipo</div>
     <h2>Lista de la compra</h2>
-    <p style="font-size:14px; color:var(--gris-medio); margin-bottom:20px;">Cantidades para 2 personas, para la semana completa (incluye ambas variantes del domingo, con y sin partido). Pulsa cada artículo para marcarlo.</p>
+    <p style="font-size:14px; color:var(--gris-medio); margin-bottom:20px;">Cantidades para 2 personas, para la semana completa (incluye ambas variantes del domingo, con y sin partido). Una lista por cada menú — cambia de pestaña según cuál vayas a seguir. Pulsa cada artículo para marcarlo.</p>
+
+    <div class="diet-week-tabs" id="compra-opcion-tabs"></div>
 
     <div class="compra-actions-top" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
       <div style="display:flex; align-items:center; gap:10px; flex:1;">
@@ -1151,82 +1154,193 @@ function renderPlanSemana() {
 }
 
 // ── DIETA SEMANAL (semana tipo, se repite) ────────────────────
+// 3 menús distintos para variar — mismo patrón de entreno cada semana,
+// pero puedes cambiar de menú cuando quieras (no hace falta seguir siempre el mismo).
 // Lunes/Miércoles/Viernes: entreno propio, toggle mañana (ayunas) / tarde.
 // Martes/Jueves: entreno de equipo fijo 21:30–22:45h, con snack pre-entreno y recuperación ligera después.
 // Sábado: descanso. Domingo: toggle partido / descanso (liga cada 15 días).
-const DIETA_SEMANA = [
-  { modo: "propio", icono: "🏊", kcal: 2200, macros: { p: 158, c: 215, g: 55 }, platos: {
-    g1: { main: "3 huevos revueltos + 2 tostadas integrales con tomate + café", alt: "", kcal: 500 },
-    g2: { main: "Arroz con pollo al horno (200g pechuga) + ensalada verde", alt: "Pieza de fruta", kcal: 650 },
-    l:  { main: "Yogur griego natural + 1 fruta", alt: "", kcal: 180 },
-    c:  { main: "Merluza al horno (200g) + 2 patatas medianas + verduras", alt: "", kcal: 580 }
-  }},
-  { modo: "equipo", kcal: 2250, macros: { p: 158, c: 215, g: 52 }, platos: {
-    desayuno: { main: "2 tostadas integrales con aguacate (½) + 3 lonchas de pavo + 2 huevos", alt: "", kcal: 520 },
-    almuerzo: { main: "Pasta integral (80g) con tomate, atún y aceitunas", alt: "Pieza de fruta", kcal: 640 },
-    pre:      { main: "Yogur proteico + fruta", alt: "", kcal: 180 },
-    recup:    { main: "Batido de proteína con leche, plátano y avena", alt: "", kcal: 380 }
-  }},
-  { modo: "propio", icono: "🏋️", kcal: 2200, macros: { p: 162, c: 210, g: 52 }, platos: {
-    g1: { main: "Porridge de avena (70g) con leche + plátano + 2 huevos cocidos", alt: "", kcal: 530 },
-    g2: { main: "Lentejas con verduras (ración generosa) + pan integral", alt: "Naranja de postre", kcal: 620 },
-    l:  { main: "Queso fresco 0% (200g) + 1 cucharada de miel", alt: "", kcal: 190 },
-    c:  { main: "Filete de ternera (150g) a la plancha + patatas al vapor + tomate", alt: "", kcal: 570 }
-  }},
-  { modo: "equipo", kcal: 2250, macros: { p: 155, c: 210, g: 55 }, platos: {
-    desayuno: { main: "Yogur griego natural (200g) + 50g de avena + kiwi + 2 huevos duros", alt: "", kcal: 540 },
-    almuerzo: { main: "Arroz con verduras y huevo (2 huevos) a la sartén", alt: "Naranja de postre", kcal: 620 },
-    pre:      { main: "30g frutos secos + 1 fruta", alt: "", kcal: 200 },
-    recup:    { main: "Revuelto rápido de 2 huevos con jamón + una tostada", alt: "", kcal: 350 }
-  }},
-  { modo: "propio", icono: "🏃", kcal: 2200, macros: { p: 150, c: 195, g: 56 }, platos: {
-    g1: { main: "Tortilla francesa (2 huevos) + 1 tostada integral con aceite de oliva", alt: "Café con leche", kcal: 400 },
-    g2: { main: "Ensalada de garbanzos con atún, tomate, pepino y huevo duro", alt: "Pan integral (40g)", kcal: 560 },
-    l:  { main: "Manzana + 30g de jamón serrano", alt: "", kcal: 160 },
-    c:  { main: "Crema de verduras + 150g de salmón al horno + arroz (60g)", alt: "", kcal: 580 }
-  }},
-  { modo: "descanso", kcal: 2000, macros: { p: 140, c: 182, g: 60 }, platos: {
-    g1: { main: "Tostadas con tomate y aceite de oliva + 2 huevos cocidos", alt: "Café con leche", kcal: 390 },
-    g2: { main: "Pollo asado (200g) + ensalada campera (patata, tomate, cebolla, huevo)", alt: "Pan integral", kcal: 640 },
-    l:  { main: "Fruta de temporada + 20g frutos secos", alt: "", kcal: 170 },
-    c:  { main: "Tortilla española (3 huevos) + ensalada verde + pan integral", alt: "", kcal: 530 }
-  }},
-  { modo: "variable",
-    descanso: { kcal: 2000, macros: { p: 132, c: 188, g: 57 }, platos: {
-      g1: { main: "Porridge de avena (60g) + fruta + café", alt: "", kcal: 380 },
-      g2: { main: "Cocido ligero: garbanzos, pollo, verduras (sin embutidos)", alt: "Pieza de fruta", kcal: 680 },
-      l:  { main: "Yogur natural + 1 fruta", alt: "", kcal: 150 },
-      c:  { main: "Revuelto de champiñones y espárragos (2 huevos) + 2 tostadas integrales", alt: "", kcal: 480 }
-    }},
-    partido: { kcal: 2300, macros: { p: 160, c: 225, g: 54 }, platos: {
-      g1: { main: "Tostada con miel y plátano + huevo cocido", alt: "", kcal: 520 },
-      g2: { main: "Arroz blanco con pollo a la plancha", alt: "", kcal: 650 },
-      l:  { main: "Plátano + un puñado de dátiles", alt: "", kcal: 195 },
-      c:  { main: "Pasta con pollo y verduras (recuperación post-partido) 🎉", alt: "", kcal: 600 }
-    }}
-  }
-];
+const DIA_MODO  = ["propio", "equipo", "propio", "equipo", "propio", "descanso", "variable"];
+const DIA_ICONO = ["🏊", null, "🏋️", null, "🏃", null, null];
 
+const DIETA_SEMANAS = {
+  1: [
+    { kcal: 2200, macros: { p: 158, c: 215, g: 55 }, platos: {
+      g1: { main: "3 huevos revueltos + 2 tostadas integrales con tomate + café", alt: "", kcal: 500 },
+      g2: { main: "Arroz con pollo al horno (200g pechuga) + ensalada verde", alt: "Pieza de fruta", kcal: 650 },
+      l:  { main: "Yogur griego natural + 1 fruta", alt: "", kcal: 180 },
+      c:  { main: "Merluza al horno (200g) + 2 patatas medianas + verduras", alt: "", kcal: 580 }
+    }},
+    { kcal: 2250, macros: { p: 158, c: 215, g: 52 }, platos: {
+      desayuno: { main: "2 tostadas integrales con aguacate (½) + 3 lonchas de pavo + 2 huevos", alt: "", kcal: 520 },
+      almuerzo: { main: "Pasta integral (80g) con tomate, atún y aceitunas", alt: "Pieza de fruta", kcal: 640 },
+      pre:      { main: "Yogur proteico + fruta", alt: "", kcal: 180 },
+      recup:    { main: "Batido de proteína con leche, plátano y avena", alt: "", kcal: 380 }
+    }},
+    { kcal: 2200, macros: { p: 162, c: 210, g: 52 }, platos: {
+      g1: { main: "Porridge de avena (70g) con leche + plátano + 2 huevos cocidos", alt: "", kcal: 530 },
+      g2: { main: "Lentejas con verduras (ración generosa) + pan integral", alt: "Naranja de postre", kcal: 620 },
+      l:  { main: "Queso fresco 0% (200g) + 1 cucharada de miel", alt: "", kcal: 190 },
+      c:  { main: "Filete de ternera (150g) a la plancha + patatas al vapor + tomate", alt: "", kcal: 570 }
+    }},
+    { kcal: 2250, macros: { p: 155, c: 210, g: 55 }, platos: {
+      desayuno: { main: "Yogur griego natural (200g) + 50g de avena + kiwi + 2 huevos duros", alt: "", kcal: 540 },
+      almuerzo: { main: "Arroz con verduras y huevo (2 huevos) a la sartén", alt: "Naranja de postre", kcal: 620 },
+      pre:      { main: "30g frutos secos + 1 fruta", alt: "", kcal: 200 },
+      recup:    { main: "Revuelto rápido de 2 huevos con jamón + una tostada", alt: "", kcal: 350 }
+    }},
+    { kcal: 2200, macros: { p: 150, c: 195, g: 56 }, platos: {
+      g1: { main: "Tortilla francesa (2 huevos) + 1 tostada integral con aceite de oliva", alt: "Café con leche", kcal: 400 },
+      g2: { main: "Ensalada de garbanzos con atún, tomate, pepino y huevo duro", alt: "Pan integral (40g)", kcal: 560 },
+      l:  { main: "Manzana + 30g de jamón serrano", alt: "", kcal: 160 },
+      c:  { main: "Crema de verduras + 150g de salmón al horno + arroz (60g)", alt: "", kcal: 580 }
+    }},
+    { kcal: 2000, macros: { p: 140, c: 182, g: 60 }, platos: {
+      g1: { main: "Tostadas con tomate y aceite de oliva + 2 huevos cocidos", alt: "Café con leche", kcal: 390 },
+      g2: { main: "Pollo asado (200g) + ensalada campera (patata, tomate, cebolla, huevo)", alt: "Pan integral", kcal: 640 },
+      l:  { main: "Fruta de temporada + 20g frutos secos", alt: "", kcal: 170 },
+      c:  { main: "Tortilla española (3 huevos) + ensalada verde + pan integral", alt: "", kcal: 530 }
+    }},
+    { descanso: { kcal: 2000, macros: { p: 132, c: 188, g: 57 }, platos: {
+        g1: { main: "Porridge de avena (60g) + fruta + café", alt: "", kcal: 380 },
+        g2: { main: "Cocido ligero: garbanzos, pollo, verduras (sin embutidos)", alt: "Pieza de fruta", kcal: 680 },
+        l:  { main: "Yogur natural + 1 fruta", alt: "", kcal: 150 },
+        c:  { main: "Revuelto de champiñones y espárragos (2 huevos) + 2 tostadas integrales", alt: "", kcal: 480 }
+      }},
+      partido: { kcal: 2300, macros: { p: 160, c: 225, g: 54 }, platos: {
+        g1: { main: "Tostada con miel y plátano + huevo cocido", alt: "", kcal: 520 },
+        g2: { main: "Arroz blanco con pollo a la plancha", alt: "", kcal: 650 },
+        l:  { main: "Plátano + un puñado de dátiles", alt: "", kcal: 195 },
+        c:  { main: "Pasta con pollo y verduras (recuperación post-partido) 🎉", alt: "", kcal: 600 }
+      }}
+    }
+  ],
+  2: [
+    { kcal: 2200, macros: { p: 160, c: 210, g: 54 }, platos: {
+      g1: { main: "Tostada de pan de centeno con aguacate y huevo poché", alt: "", kcal: 510 },
+      g2: { main: "Quinoa con pollo a la plancha, pimientos y cebolla", alt: "Pieza de fruta", kcal: 630 },
+      l:  { main: "Requesón con nueces y miel", alt: "", kcal: 185 },
+      c:  { main: "Bacalao al horno con pisto casero", alt: "", kcal: 560 }
+    }},
+    { kcal: 2250, macros: { p: 158, c: 216, g: 52 }, platos: {
+      desayuno: { main: "Tostadas con queso fresco, pavo y tomate + zumo natural", alt: "", kcal: 515 },
+      almuerzo: { main: "Cuscús con gambas, calabacín y limón", alt: "Pieza de fruta", kcal: 625 },
+      pre:      { main: "Yogur griego con arándanos", alt: "", kcal: 175 },
+      recup:    { main: "Tostada integral con queso fresco y pavo", alt: "", kcal: 320 }
+    }},
+    { kcal: 2200, macros: { p: 163, c: 208, g: 53 }, platos: {
+      g1: { main: "Porridge de avena con manzana y canela + 2 huevos revueltos", alt: "", kcal: 525 },
+      g2: { main: "Alubias blancas con chorizo magro y verduras", alt: "Pan integral", kcal: 640 },
+      l:  { main: "Batido de plátano con leche y proteína en polvo", alt: "", kcal: 195 },
+      c:  { main: "Solomillo de cerdo a la plancha con boniato asado", alt: "", kcal: 575 }
+    }},
+    { kcal: 2250, macros: { p: 156, c: 214, g: 56 }, platos: {
+      desayuno: { main: "Tortitas de avena y plátano con miel", alt: "", kcal: 530 },
+      almuerzo: { main: "Arroz tres delicias casero con pollo y gambas", alt: "Naranja de postre", kcal: 635 },
+      pre:      { main: "30g de anacardos + 1 fruta", alt: "", kcal: 205 },
+      recup:    { main: "Skyr con avena y miel", alt: "", kcal: 330 }
+    }},
+    { kcal: 2200, macros: { p: 143, c: 178, g: 57 }, platos: {
+      g1: { main: "Tostada integral con tomate y aceite + café con leche", alt: "", kcal: 370 },
+      g2: { main: "Ensalada de pasta con atún, maíz, tomate y aceitunas", alt: "", kcal: 555 },
+      l:  { main: "Kiwi + un puñado de almendras", alt: "", kcal: 155 },
+      c:  { main: "Crema de calabaza con pollo desmenuzado", alt: "", kcal: 565 }
+    }},
+    { kcal: 2000, macros: { p: 145, c: 180, g: 59 }, platos: {
+      g1: { main: "Huevos benedict caseros sobre tostada integral", alt: "", kcal: 400 },
+      g2: { main: "Paella de verduras y pollo (ración generosa)", alt: "Pan", kcal: 650 },
+      l:  { main: "Fruta de temporada + queso fresco", alt: "", kcal: 175 },
+      c:  { main: "Hamburguesa casera de pavo con ensalada", alt: "", kcal: 540 }
+    }},
+    { descanso: { kcal: 2000, macros: { p: 130, c: 185, g: 58 }, platos: {
+        g1: { main: "Tostada francesa integral con canela y fruta", alt: "", kcal: 390 },
+        g2: { main: "Fideuá de marisco y pollo", alt: "Pieza de fruta", kcal: 670 },
+        l:  { main: "Yogur griego con miel y nueces", alt: "", kcal: 165 },
+        c:  { main: "Crema de puerros con salmón ahumado", alt: "", kcal: 490 }
+      }},
+      partido: { kcal: 2300, macros: { p: 155, c: 210, g: 56 }, platos: {
+        g1: { main: "Tostada con mermelada sin azúcar, queso fresco y plátano", alt: "", kcal: 500 },
+        g2: { main: "Puré de patata con pechuga de pollo a la plancha", alt: "", kcal: 640 },
+        l:  { main: "Plátano con miel", alt: "", kcal: 190 },
+        c:  { main: "Bocadillo de tortilla francesa con ensalada", alt: "", kcal: 580 }
+      }}
+    }
+  ],
+  3: [
+    { kcal: 2200, macros: { p: 161, c: 212, g: 54 }, platos: {
+      g1: { main: "Bol de yogur skyr con granola casera y frutos rojos", alt: "", kcal: 520 },
+      g2: { main: "Pollo al curry suave con arroz basmati", alt: "Pieza de fruta", kcal: 645 },
+      l:  { main: "Palitos de zanahoria y pepino con hummus", alt: "", kcal: 170 },
+      c:  { main: "Rape a la plancha con verduras salteadas", alt: "", kcal: 560 }
+    }},
+    { kcal: 2250, macros: { p: 146, c: 184, g: 58 }, platos: {
+      desayuno: { main: "Tostada de centeno con queso de untar y salmón ahumado", alt: "", kcal: 400 },
+      almuerzo: { main: "Lentejas estofadas con verduras y chorizo magro", alt: "", kcal: 570 },
+      pre:      { main: "Naranja + 20g de almendras", alt: "", kcal: 150 },
+      recup:    { main: "Yogur proteico con plátano y nueces", alt: "", kcal: 340 }
+    }},
+    { kcal: 2200, macros: { p: 164, c: 206, g: 55 }, platos: {
+      g1: { main: "Wrap integral de huevo, espinacas y queso", alt: "", kcal: 510 },
+      g2: { main: "Garbanzos guisados con espinacas y bacalao", alt: "Pan", kcal: 630 },
+      l:  { main: "Barrita de avena y dátil casera", alt: "", kcal: 190 },
+      c:  { main: "Costillas de cerdo al horno con puré de patata", alt: "", kcal: 580 }
+    }},
+    { kcal: 2250, macros: { p: 158, c: 216, g: 53 }, platos: {
+      desayuno: { main: "Revuelto de gambas y champiñón con tostada", alt: "", kcal: 515 },
+      almuerzo: { main: "Boniato relleno de pollo y verduras al horno", alt: "Pieza de fruta", kcal: 630 },
+      pre:      { main: "Yogur proteico con semillas de chía", alt: "", kcal: 185 },
+      recup:    { main: "Tortilla francesa ligera (2 huevos) con tostada", alt: "", kcal: 310 }
+    }},
+    { kcal: 2200, macros: { p: 157, c: 213, g: 55 }, platos: {
+      g1: { main: "Tostadas con crema de cacahuete y plátano", alt: "", kcal: 525 },
+      g2: { main: "Ensalada templada de quinoa, pollo y aguacate", alt: "Naranja", kcal: 615 },
+      l:  { main: "Cuajada con nueces y miel", alt: "", kcal: 180 },
+      c:  { main: "Salmón al papillote con puerro y limón", alt: "", kcal: 560 }
+    }},
+    { kcal: 2000, macros: { p: 160, c: 210, g: 55 }, platos: {
+      g1: { main: "Bol de avena con cacao, plátano y cacahuete", alt: "", kcal: 530 },
+      g2: { main: "Arroz negro con sepia y gambas", alt: "Pan", kcal: 650 },
+      l:  { main: "Fruta de temporada + 1 yogur natural", alt: "", kcal: 165 },
+      c:  { main: "Pechuga rellena de jamón y queso con ensalada", alt: "", kcal: 555 }
+    }},
+    { descanso: { kcal: 2000, macros: { p: 128, c: 182, g: 56 }, platos: {
+        g1: { main: "Tostada integral con jamón york y queso + fruta", alt: "", kcal: 390 },
+        g2: { main: "Arroz con conejo y verduras de temporada", alt: "Pieza de fruta", kcal: 660 },
+        l:  { main: "Yogur griego con plátano y canela", alt: "", kcal: 160 },
+        c:  { main: "Sopa de pescado y marisco casera", alt: "", kcal: 480 }
+      }},
+      partido: { kcal: 2300, macros: { p: 150, c: 220, g: 52 }, platos: {
+        g1: { main: "Porridge de avena con miel y plátano", alt: "", kcal: 510 },
+        g2: { main: "Arroz con pollo y verduras suaves", alt: "", kcal: 660 },
+        l:  { main: "Dátiles con un puñado de pasas", alt: "", kcal: 180 },
+        c:  { main: "Ensalada templada de pasta con atún (recuperación)", alt: "", kcal: 590 }
+      }}
+    }
+  ]
+};
+
+let menuOpcion = 1;
 let dietaIdx = 0;
 let expandido = null;
 const horarios = {};
 
-function recetaKey(idx, slot) {
-  if (DIETA_SEMANA[idx].modo === "variable") {
+function recetaKey(opcion, idx, slot) {
+  if (DIA_MODO[idx] === "variable") {
     const modoDom = horarios[idx] || "descanso";
-    return `domingo-${modoDom}-${slot}`;
+    return `o${opcion}-domingo-${modoDom}-${slot}`;
   }
-  return `${DIA_KEYS[idx]}-${slot}`;
+  return `o${opcion}-${DIA_KEYS[idx]}-${slot}`;
 }
 
-function construirComidas(idx) {
-  const d = DIETA_SEMANA[idx];
+function construirComidas(opcion, idx) {
+  const modo = DIA_MODO[idx];
+  const d = DIETA_SEMANAS[opcion][idx];
 
-  if (d.modo === "propio") {
+  if (modo === "propio") {
+    const icono = DIA_ICONO[idx];
     const horario = horarios[idx] || "manana";
     if (horario === "manana") {
       return [
-        { label: "7:00h", main: `${d.icono} Entreno propio en ayunas`, alt: "Cardio o pesas según el día", kcal: 0 },
+        { label: "7:00h", main: `${icono} Entreno propio en ayunas`, alt: "Cardio o pesas según el día", kcal: 0 },
         { label: "Desayuno", slot: "g1", ...d.platos.g1, contexto: "⚡ Post-entreno — en los primeros 30-60 min" },
         { label: "Almuerzo", slot: "g2", ...d.platos.g2 },
         { label: "Merienda", slot: "l", ...d.platos.l },
@@ -1236,13 +1350,13 @@ function construirComidas(idx) {
     return [
       { label: "Desayuno", slot: "l", ...d.platos.l, contexto: "Desayuno normal, sin prisa" },
       { label: "Almuerzo", slot: "g2", ...d.platos.g2, contexto: "🔋 Combustible antes de entrenar" },
-      { label: "18:00h", main: `${d.icono} Entreno propio por la tarde`, alt: "Cardio o pesas según el día", kcal: 0 },
+      { label: "18:00h", main: `${icono} Entreno propio por la tarde`, alt: "Cardio o pesas según el día", kcal: 0 },
       { label: "Recuperación", slot: "g1", ...d.platos.g1, contexto: "⚡ Post-entreno" },
       { label: "Cena", slot: "c", ...d.platos.c }
     ];
   }
 
-  if (d.modo === "equipo") {
+  if (modo === "equipo") {
     return [
       { label: "Desayuno", slot: "desayuno", ...d.platos.desayuno },
       { label: "Almuerzo", slot: "almuerzo", ...d.platos.almuerzo },
@@ -1252,7 +1366,7 @@ function construirComidas(idx) {
     ];
   }
 
-  if (d.modo === "descanso") {
+  if (modo === "descanso") {
     return [
       { label: "Desayuno", slot: "g1", ...d.platos.g1 },
       { label: "Almuerzo", slot: "g2", ...d.platos.g2 },
@@ -1281,45 +1395,104 @@ function construirComidas(idx) {
 }
 
 const RECETAS = {
-  "lunes-g1": { tiempo: "10 min", ingredientes: ["3 huevos", "2 rebanadas de pan integral", "1 tomate maduro", "Café"], pasos: ["Bate 3 huevos con sal y pimienta.", "Cocínalos a fuego medio removiendo despacio hasta que cuajen cremosos.", "Tuesta el pan y frótalo con tomate maduro y un chorrito de aceite.", "Sirve los huevos sobre las tostadas y acompaña con el café."], tip: "No subas el fuego: los huevos revueltos quedan mejor lentos y a baja temperatura." },
-  "lunes-g2": { tiempo: "35 min", ingredientes: ["200g de pechuga de pollo", "150g de arroz (crudo)", "Lechuga, tomate y pepino para la ensalada"], pasos: ["Salpimienta la pechuga y hornéala a 200°C 25 min, dándole la vuelta a mitad.", "Cuece el arroz en agua con sal según el paquete.", "Prepara la ensalada con lechuga, tomate y pepino, aliña con aceite y limón.", "Sirve el arroz con el pollo en lonchas encima."], tip: "Si horneas doble de pollo, tienes proteína para el día siguiente sin esfuerzo." },
-  "lunes-l": { tiempo: "2 min", ingredientes: ["1 yogur griego natural", "1 fruta"], pasos: ["Pon el yogur griego en un bol.", "Añade la fruta troceada encima.", "Opcional: un chorrito de miel o canela."], tip: "El yogur griego tiene el doble de proteína que el normal, elige sin azúcares añadidos." },
-  "lunes-c": { tiempo: "25 min", ingredientes: ["200g de merluza", "2 patatas medianas", "1 calabacín y 1 pimiento"], pasos: ["Precalienta el horno a 200°C. Coloca la merluza en bandeja con sal, limón y aceite.", "Pela y trocea las patatas, ponlas en el horno 10 min antes que el pescado.", "Añade verduras en la misma bandeja. Hornea todo 20 min."], tip: "La merluza está lista cuando la carne se separa fácilmente con un tenedor." },
+  "o1-lunes-g1": { tiempo: "10 min", ingredientes: ["3 huevos", "2 rebanadas de pan integral", "1 tomate maduro", "Café"], pasos: ["Bate 3 huevos con sal y pimienta.", "Cocínalos a fuego medio removiendo despacio hasta que cuajen cremosos.", "Tuesta el pan y frótalo con tomate maduro y un chorrito de aceite.", "Sirve los huevos sobre las tostadas y acompaña con el café."], tip: "No subas el fuego: los huevos revueltos quedan mejor lentos y a baja temperatura." },
+  "o1-lunes-g2": { tiempo: "35 min", ingredientes: ["200g de pechuga de pollo", "150g de arroz (crudo)", "Lechuga, tomate y pepino para la ensalada"], pasos: ["Salpimienta la pechuga y hornéala a 200°C 25 min, dándole la vuelta a mitad.", "Cuece el arroz en agua con sal según el paquete.", "Prepara la ensalada con lechuga, tomate y pepino, aliña con aceite y limón.", "Sirve el arroz con el pollo en lonchas encima."], tip: "Si horneas doble de pollo, tienes proteína para el día siguiente sin esfuerzo." },
+  "o1-lunes-l": { tiempo: "2 min", ingredientes: ["1 yogur griego natural", "1 fruta"], pasos: ["Pon el yogur griego en un bol.", "Añade la fruta troceada encima.", "Opcional: un chorrito de miel o canela."], tip: "El yogur griego tiene el doble de proteína que el normal, elige sin azúcares añadidos." },
+  "o1-lunes-c": { tiempo: "25 min", ingredientes: ["200g de merluza", "2 patatas medianas", "1 calabacín y 1 pimiento"], pasos: ["Precalienta el horno a 200°C. Coloca la merluza en bandeja con sal, limón y aceite.", "Pela y trocea las patatas, ponlas en el horno 10 min antes que el pescado.", "Añade verduras en la misma bandeja. Hornea todo 20 min."], tip: "La merluza está lista cuando la carne se separa fácilmente con un tenedor." },
+  "o1-martes-desayuno": { tiempo: "12 min", ingredientes: ["2 rebanadas de pan integral", "½ aguacate", "3 lonchas de pavo", "2 huevos"], pasos: ["Tuesta el pan integral y úntalo con el aguacate chafado con sal y limón.", "Añade las lonchas de pavo encima del aguacate.", "Fríe o escalfa los 2 huevos y colócalos encima."], tip: "El aguacate se oxida rápido: añade limón nada más chafarlo." },
+  "o1-martes-almuerzo": { tiempo: "20 min", ingredientes: ["80g de pasta integral (crudo)", "1 lata de atún", "Tomate triturado natural", "Aceitunas"], pasos: ["Cuece la pasta integral según el paquete.", "Escurre la pasta y mézclala con tomate triturado natural en frío.", "Añade el atún escurrido y las aceitunas troceadas."], tip: "Esta pasta está igual de buena fría: prepárala por la noche y llévala de tupper." },
+  "o1-martes-pre": { tiempo: "2 min", ingredientes: ["1 yogur proteico", "1 fruta"], pasos: ["Pon el yogur proteico en un bol.", "Añade la fruta troceada encima."], tip: "Tómalo sobre las 19:00h, un par de horas antes de salir hacia el entreno." },
+  "o1-martes-recup": { tiempo: "3 min", ingredientes: ["250ml de leche", "1 plátano", "20g de avena", "1 cacito de proteína en polvo (opcional)"], pasos: ["Pon la leche, el plátano y la avena en la batidora.", "Añade el cacito de proteína si tienes.", "Tritura todo y sirve al momento."], tip: "Si no tienes proteína en polvo, un yogur griego añadido también aporta proteína extra sin complicarte." },
+  "o1-miercoles-g1": { tiempo: "10 min", ingredientes: ["70g de avena", "200ml de leche", "1 plátano", "2 huevos"], pasos: ["Calienta la leche sin hervir y añade la avena. Remueve 3-4 min a fuego medio.", "Añade el plátano troceado encima del porridge ya en el bol.", "Cuece los huevos 8 min en agua hirviendo, pélalos y sírvelos al lado."], tip: "Prepara los huevos la noche anterior y guárdalos en la nevera para ganar tiempo." },
+  "o1-miercoles-g2": { tiempo: "30 min", ingredientes: ["300g de lentejas cocidas", "1 zanahoria, cebolla y pimiento", "1 rebanada de pan integral"], pasos: ["Sofríe cebolla, ajo, zanahoria y pimiento en aceite 5 min.", "Añade las lentejas (cocidas o de bote escurridas) y caldo. Cuece 15 min.", "Sirve con una rebanada de pan integral."], tip: "Las lentejas de bote ahorran 20 min: solo escúrrelas y enjuágalas bien." },
+  "o1-miercoles-l": { tiempo: "1 min", ingredientes: ["200g de queso fresco 0%", "1 cucharada de miel"], pasos: ["Pon el queso fresco en un bol o plato.", "Vierte una cucharada de miel por encima."], tip: "El queso fresco 0% es una de las mejores fuentes de proteína por caloría que existen." },
+  "o1-miercoles-c": { tiempo: "20 min", ingredientes: ["150g de filete de ternera", "2 patatas medianas", "1 tomate"], pasos: ["Pela y trocea las patatas, cuécelas al vapor 15 min.", "Calienta la plancha fuerte. Salpimenta el filete y cocínalo 2-3 min por lado.", "Corta el tomate en rodajas, aliña con aceite, sal y orégano."], tip: "Deja reposar el filete 2 min antes de cortarlo para que los jugos no se escapen." },
+  "o1-jueves-desayuno": { tiempo: "12 min", ingredientes: ["1 yogur griego (200g)", "50g de avena", "1 kiwi", "2 huevos"], pasos: ["Cuece los huevos 8 min, enfríalos en agua fría y pélalos.", "Calienta la leche, añade la avena y remueve 3-4 min hasta que espese.", "Sirve el porridge con el kiwi troceado y los huevos al lado."], tip: "La avena en copos finos se hace más rápido que la gruesa y queda igual de bien." },
+  "o1-jueves-almuerzo": { tiempo: "20 min", ingredientes: ["150g de arroz (crudo)", "2 huevos", "Cebolla, pimiento y calabacín"], pasos: ["Cuece el arroz en agua con sal. Reserva.", "Sofríe cebolla, pimiento y calabacín en aceite 5 min.", "Añade el arroz cocido, haz un hueco, rompe los huevos y mezcla."], tip: "Este arroz es perfecto para usar verduras que tengas en la nevera a punto de pasarse." },
+  "o1-jueves-pre": { tiempo: "1 min", ingredientes: ["30g de frutos secos", "1 fruta"], pasos: ["Pesa 30g de frutos secos.", "Sirve con la fruta que tengas a mano."], tip: "Tómalo sobre las 19:00h, un par de horas antes de salir hacia el entreno." },
+  "o1-jueves-recup": { tiempo: "6 min", ingredientes: ["2 huevos", "30g de jamón york o serrano", "1 rebanada de pan integral"], pasos: ["Bate los 2 huevos con sal.", "Saltea el jamón en taquitos 1 min, añade el huevo y cuaja removiendo.", "Sirve con la tostada."], tip: "A estas horas mejor algo rápido y ligero que una cena completa — no hace falta gran cantidad." },
+  "o1-viernes-g1": { tiempo: "8 min", ingredientes: ["2 huevos", "1 rebanada de pan integral", "Café con leche"], pasos: ["Bate 2 huevos con sal y un chorrito de leche.", "Calienta una sartén con unas gotas de aceite a fuego medio.", "Vierte los huevos y deja que cuajen sin remover, doblando la tortilla a la mitad."], tip: "Para una tortilla francesa perfecta, el fuego debe ser medio-bajo." },
+  "o1-viernes-g2": { tiempo: "10 min", ingredientes: ["200g de garbanzos cocidos", "1 lata de atún", "1 tomate y 1 pepino", "1 huevo duro", "40g de pan integral"], pasos: ["Escurre y enjuaga los garbanzos de bote.", "Trocea tomate, pepino y cebolleta. Mezcla con los garbanzos y el atún escurrido.", "Añade el huevo duro en rodajas y aliña con aceite, vinagre y sal."], tip: "Prepara esta ensalada la noche anterior y guárdala sin aliñar para que no se ablande." },
+  "o1-viernes-l": { tiempo: "2 min", ingredientes: ["1 manzana", "30g de jamón serrano"], pasos: ["Lava la manzana y córtala en gajos.", "Sirve con las lonchas de jamón al lado."], tip: "El jamón serrano tiene más proteína por ración de lo que parece." },
+  "o1-viernes-c": { tiempo: "30 min", ingredientes: ["150g de salmón", "60g de arroz (crudo)", "Calabacín, puerro y zanahoria"], pasos: ["Sofríe cebolla, calabacín, puerro y zanahoria. Añade caldo y cuece 20 min. Tritura.", "Coloca el salmón en bandeja con sal, limón y eneldo. Hornea a 200°C 15 min.", "Sirve la crema en bol, el salmón encima y el arroz al lado."], tip: "El salmón está listo cuando cambia de color naranja vivo a rosado opaco por dentro." },
+  "o1-sabado-g1": { tiempo: "8 min", ingredientes: ["2 rebanadas de pan", "1 tomate", "2 huevos"], pasos: ["Tuesta el pan, frótalo con tomate maduro y un chorrito de aceite.", "Cuece los huevos 8 min en agua hirviendo. Pélalos y córtalos en mitades.", "Sirve las tostadas con los huevos al lado y el café con leche."], tip: "Los huevos cocidos duran 5 días en la nevera con cáscara: cuece varios de golpe." },
+  "o1-sabado-g2": { tiempo: "60 min", ingredientes: ["200g de pollo (contramuslo o pechuga)", "1 patata", "1 tomate, cebolla y 1 huevo duro", "Pan integral"], pasos: ["Salpimienta el pollo y hornéalo a 200°C unos 40-45 min.", "Cuece una patata mediana, déjala enfriar y trocéala.", "Mezcla la patata con tomate, cebolla, huevo duro y aceitunas, aliña y sirve con el pollo."], tip: "El contramuslo queda más jugoso que la pechuga al horno y es más barato." },
+  "o1-sabado-l": { tiempo: "2 min", ingredientes: ["1 fruta de temporada", "20g de frutos secos"], pasos: ["Pela o lava la fruta de temporada y trocéala.", "Sirve con los frutos secos al lado."], tip: "En julio/agosto: melocotón, nectarina, sandía y melón son ideales y muy económicos." },
+  "o1-sabado-c": { tiempo: "20 min", ingredientes: ["3 huevos", "2 patatas medianas", "Ensalada verde", "Pan integral"], pasos: ["Pela y trocea 2 patatas medianas, fríelas en aceite a fuego medio hasta que estén blandas.", "Bate 3 huevos con sal, añade las patatas y mezcla.", "Vierte en sartén antiadherente, cuaja 3 min por cada lado."], tip: "Deja reposar la tortilla 5 min antes de cortarla: se asienta y se corta mejor." },
+  "o1-domingo-descanso-g1": { tiempo: "8 min", ingredientes: ["60g de avena", "1 fruta", "Café"], pasos: ["Calienta la leche sin hervir y añade 60g de avena. Remueve 3-4 min.", "Sirve en un bol y añade la fruta troceada encima.", "Espolvorea canela o añade un chorrito de miel."], tip: "Buen día para preparar avena overnight: mézclala la noche anterior." },
+  "o1-domingo-descanso-g2": { tiempo: "45 min", ingredientes: ["200g de garbanzos cocidos", "150g de pollo", "Zanahoria, patata y judía verde"], pasos: ["Sofríe cebolla, ajo y pimiento en aceite. Añade los garbanzos de bote escurridos.", "Añade el pollo troceado y caldo de pollo.", "Incorpora zanahoria, patata y judías verdes. Cuece todo 25 min."], tip: "Con restos de pollo asado del sábado este cocido sale en 20 minutos." },
+  "o1-domingo-descanso-l": { tiempo: "2 min", ingredientes: ["1 yogur natural", "1 fruta"], pasos: ["Pon el yogur natural en un bol.", "Añade la fruta troceada encima."], tip: "Elige yogur natural sin azúcares añadidos, no el edulcorado ni el de sabores." },
+  "o1-domingo-descanso-c": { tiempo: "10 min", ingredientes: ["2 huevos", "100g de champiñones", "Medio manojo de espárragos", "2 rebanadas de pan integral"], pasos: ["Limpia y lamina los champiñones. Trocea los espárragos en trozos de 3 cm.", "Saltéalos en sartén con aceite y ajo picado 4-5 min a fuego fuerte.", "Bate 2 huevos, viértelos en la sartén y remueve suavemente hasta que cuajen."], tip: "No tapes los champiñones al saltear: sueltan agua y necesitan evaporarla para dorarse." },
+  "o1-domingo-partido-g1": { tiempo: "5 min", ingredientes: ["1 rebanada de pan", "1 cucharadita de miel", "1 plátano", "1 huevo"], pasos: ["Tuesta el pan y añade una fina capa de miel.", "Corta el plátano en rodajas por encima.", "Sirve con el huevo cocido aparte."], tip: "El día del partido, prioriza hidratos de fácil digestión y evita grasas pesadas." },
+  "o1-domingo-partido-g2": { tiempo: "20 min", ingredientes: ["150g de arroz (crudo)", "200g de pechuga de pollo"], pasos: ["Cuece el arroz blanco.", "Cocina el pollo en plancha 6-7 min por lado, sin especias fuertes.", "Sirve el arroz con el pollo encima."], tip: "Come esta comida unas 3h antes del partido — simple, sin fibra en exceso." },
+  "o1-domingo-partido-l": { tiempo: "1 min", ingredientes: ["1 plátano", "4 dátiles"], pasos: ["Pela el plátano.", "Sirve con los dátiles."], tip: "Snack rápido de azúcares de absorción rápida, ideal en el calentamiento antes del partido." },
+  "o1-domingo-partido-c": { tiempo: "20 min", ingredientes: ["100g de pasta (crudo)", "200g de pollo", "Verduras variadas"], pasos: ["Cuece la pasta.", "Saltea pollo y verduras variadas 8 min.", "Mezcla todo y sirve — ¡a celebrar!"], tip: "Después del partido, no te olvides de hidratarte bien además de comer." },
 
-  "martes-desayuno": { tiempo: "12 min", ingredientes: ["2 rebanadas de pan integral", "½ aguacate", "3 lonchas de pavo", "2 huevos"], pasos: ["Tuesta el pan integral y úntalo con el aguacate chafado con sal y limón.", "Añade las lonchas de pavo encima del aguacate.", "Fríe o escalfa los 2 huevos y colócalos encima."], tip: "El aguacate se oxida rápido: añade limón nada más chafarlo." },
-  "martes-almuerzo": { tiempo: "20 min", ingredientes: ["80g de pasta integral (crudo)", "1 lata de atún", "Tomate triturado natural", "Aceitunas"], pasos: ["Cuece la pasta integral según el paquete.", "Escurre la pasta y mézclala con tomate triturado natural en frío.", "Añade el atún escurrido y las aceitunas troceadas."], tip: "Esta pasta está igual de buena fría: prepárala por la noche y llévala de tupper." },
-  "martes-pre": { tiempo: "2 min", ingredientes: ["1 yogur proteico", "1 fruta"], pasos: ["Pon el yogur proteico en un bol.", "Añade la fruta troceada encima."], tip: "Tómalo sobre las 19:00h, un par de horas antes de salir hacia el entreno." },
-  "martes-recup": { tiempo: "3 min", ingredientes: ["250ml de leche", "1 plátano", "20g de avena", "1 cacito de proteína en polvo (opcional)"], pasos: ["Pon la leche, el plátano y la avena en la batidora.", "Añade el cacito de proteína si tienes.", "Tritura todo y sirve al momento."], tip: "Si no tienes proteína en polvo, un yogur griego añadido también aporta proteína extra sin complicarte." },
+  "o2-lunes-g1": { tiempo: "8 min", ingredientes: ["1 rebanada de pan de centeno", "½ aguacate", "1 huevo"], pasos: ["Tuesta el pan de centeno.", "Chafa el aguacate con limón y sal y extiéndelo sobre el pan.", "Escalfa el huevo 3 min en agua con un chorro de vinagre y colócalo encima."], tip: "El agua debe estar a punto de hervir, no hirviendo a borbotones, para que el huevo no se deshaga." },
+  "o2-lunes-g2": { tiempo: "25 min", ingredientes: ["150g de quinoa (crudo)", "200g de pechuga de pollo", "1 pimiento y ½ cebolla"], pasos: ["Cuece la quinoa 12 min en agua con sal y escúrrela.", "Saltea pimiento y cebolla en tiras 5 min, añade el pollo troceado y cocina 6-7 min.", "Mezcla todo y aliña con aceite de oliva."], tip: "Lava bien la quinoa antes de cocerla para quitar el amargor natural." },
+  "o2-lunes-l": { tiempo: "2 min", ingredientes: ["150g de requesón", "10g de nueces", "1 cucharadita de miel"], pasos: ["Pon el requesón en un bol.", "Añade las nueces troceadas y un hilo de miel."], tip: "El requesón tiene menos grasa que el queso fresco normal y sigue siendo muy saciante." },
+  "o2-lunes-c": { tiempo: "30 min", ingredientes: ["200g de bacalao", "Calabacín, pimiento, berenjena y cebolla"], pasos: ["Sofríe cebolla, calabacín, pimiento y berenjena troceados 15 min.", "Añade tomate triturado y cuece 10 min más.", "Hornea el bacalao 12 min a 200°C y sírvelo sobre el pisto."], tip: "Si usas bacalao congelado, descongélalo en la nevera la noche anterior, nunca a temperatura ambiente." },
+  "o2-martes-desayuno": { tiempo: "10 min", ingredientes: ["2 rebanadas de pan integral", "80g de queso fresco", "3 lonchas de pavo", "1 tomate", "1 naranja para el zumo"], pasos: ["Tuesta el pan integral.", "Unta el queso fresco y añade las lonchas de pavo y el tomate en rodajas.", "Acompaña con el zumo recién exprimido."], tip: "El zumo recién exprimido pierde vitamina C rápido — tómalo justo después de prepararlo." },
+  "o2-martes-almuerzo": { tiempo: "15 min", ingredientes: ["120g de cuscús (crudo)", "150g de gambas peladas", "1 calabacín"], pasos: ["Hidrata el cuscús con agua caliente y sal, 5 min.", "Saltea el calabacín en dados y las gambas 4 min.", "Mezcla todo con un chorro de limón."], tip: "No cocines de más las gambas: 2-3 min por lado es suficiente." },
+  "o2-martes-pre": { tiempo: "2 min", ingredientes: ["1 yogur griego", "40g de arándanos"], pasos: ["Pon el yogur en un bol.", "Añade los arándanos por encima."], tip: "Tómalo sobre las 19:00h, un par de horas antes de salir hacia el entreno." },
+  "o2-martes-recup": { tiempo: "4 min", ingredientes: ["1 rebanada de pan integral", "50g de queso fresco", "2 lonchas de pavo"], pasos: ["Tuesta el pan integral.", "Unta el queso fresco.", "Añade las lonchas de pavo por encima."], tip: "Snack rápido y ligero, ideal para no complicarte a estas horas." },
+  "o2-miercoles-g1": { tiempo: "10 min", ingredientes: ["60g de avena", "1 manzana", "2 huevos"], pasos: ["Cuece la avena con leche y manzana rallada 4 min, añade canela.", "Bate los huevos y cocínalos a fuego suave removiendo.", "Sirve ambos juntos."], tip: "La manzana rallada se deshace en el porridge y le da dulzor sin azúcar añadido." },
+  "o2-miercoles-g2": { tiempo: "25 min", ingredientes: ["300g de alubias cocidas", "50g de chorizo magro", "Cebolla y zanahoria"], pasos: ["Sofríe cebolla, ajo y zanahoria 5 min.", "Añade las alubias cocidas, un poco de chorizo en rodajas finas y caldo.", "Cuece 15 min a fuego suave."], tip: "Usa poca cantidad de chorizo, solo para dar sabor — el grueso de proteína viene de las alubias." },
+  "o2-miercoles-l": { tiempo: "3 min", ingredientes: ["1 plátano", "200ml de leche", "1 cacito de proteína en polvo"], pasos: ["Tritura el plátano con la leche y el cacao o proteína en polvo.", "Sirve bien frío."], tip: "Congela el plátano en trozos de antemano y el batido saldrá con textura cremosa." },
+  "o2-miercoles-c": { tiempo: "30 min", ingredientes: ["200g de solomillo de cerdo", "1 boniato mediano"], pasos: ["Corta el boniato en gajos, hornéalo 25 min a 200°C con aceite y sal.", "Salpimienta el solomillo y cocínalo 3-4 min por lado en plancha fuerte.", "Sirve junto con ensalada verde."], tip: "Deja reposar la carne 3 min antes de cortarla para que no pierda jugo." },
+  "o2-jueves-desayuno": { tiempo: "10 min", ingredientes: ["60g de avena", "1 plátano", "1 huevo", "1 cucharada de miel"], pasos: ["Tritura avena, plátano y un huevo hasta obtener una masa.", "Cocina las tortitas 2 min por lado en sartén antiadherente.", "Sirve con un hilo de miel."], tip: "Si la masa queda muy espesa, añade un chorrito de leche." },
+  "o2-jueves-almuerzo": { tiempo: "20 min", ingredientes: ["150g de arroz (crudo)", "100g de pollo", "100g de gambas", "1 huevo", "Guisante y zanahoria"], pasos: ["Cuece el arroz y déjalo enfriar (mejor de un día para otro).", "Saltea guisante, zanahoria, pollo y gambas 5 min.", "Añade el arroz y un huevo revuelto, mezcla bien."], tip: "El arroz frío del día anterior suelta mejor en la sartén que el recién hecho." },
+  "o2-jueves-pre": { tiempo: "1 min", ingredientes: ["30g de anacardos", "1 fruta"], pasos: ["Pesa los anacardos.", "Sirve con la fruta que tengas a mano."], tip: "Tómalo sobre las 19:00h, un par de horas antes de salir hacia el entreno." },
+  "o2-jueves-recup": { tiempo: "2 min", ingredientes: ["200g de skyr", "20g de avena", "1 cucharadita de miel"], pasos: ["Pon el skyr en un bol.", "Añade la avena por encima.", "Termina con un hilo de miel."], tip: "No hace falta cocinar nada — perfecto para cuando llegas tarde del entreno." },
+  "o2-viernes-g1": { tiempo: "5 min", ingredientes: ["1 rebanada de pan integral", "1 tomate", "Café con leche"], pasos: ["Tuesta el pan.", "Frota con tomate maduro y añade un chorrito de aceite y sal.", "Sirve con el café."], tip: "El tomate rallado en vez de en rodajas empapa mejor el pan." },
+  "o2-viernes-g2": { tiempo: "20 min", ingredientes: ["100g de pasta (crudo)", "1 lata de atún", "2 cucharadas de maíz", "1 tomate", "Aceitunas"], pasos: ["Cuece la pasta y enfríala bajo el grifo.", "Mezcla con atún escurrido, maíz, tomate y aceitunas.", "Aliña con aceite y un poco de vinagre."], tip: "Esta ensalada mejora si reposa 30 min en la nevera antes de comer." },
+  "o2-viernes-l": { tiempo: "2 min", ingredientes: ["1 kiwi", "20g de almendras"], pasos: ["Pela y trocea el kiwi.", "Sirve con las almendras al lado."], tip: "Las almendras con piel tienen algo más de fibra que las peladas." },
+  "o2-viernes-c": { tiempo: "25 min", ingredientes: ["300g de calabaza", "100g de pollo cocido"], pasos: ["Cuece calabaza, cebolla y puerro en caldo 20 min.", "Tritura hasta que quede fina.", "Añade el pollo cocido y desmenuzado por encima."], tip: "Un chorrito de leche evaporada al triturar da una textura más sedosa." },
+  "o2-sabado-g1": { tiempo: "10 min", ingredientes: ["2 huevos", "1 rebanada de pan integral", "Yogur griego para la salsa"], pasos: ["Escalfa 2 huevos 3 min.", "Tuesta el pan y coloca los huevos encima.", "Añade una cucharadita de salsa yogur-limón por encima."], tip: "Sustituye la salsa holandesa clásica por yogur griego con limón: mismo efecto, menos calorías." },
+  "o2-sabado-g2": { tiempo: "35 min", ingredientes: ["150g de arroz (crudo)", "200g de pollo", "Judía verde, pimiento y tomate", "Pan"], pasos: ["Sofríe pollo troceado y verduras 10 min.", "Añade el arroz y el caldo caliente, cuece 18 min sin remover.", "Deja reposar 5 min antes de servir."], tip: "No remuevas el arroz mientras cuece: así se forma el socarrat en el fondo." },
+  "o2-sabado-l": { tiempo: "2 min", ingredientes: ["1 fruta de temporada", "100g de queso fresco"], pasos: ["Trocea la fruta.", "Sirve con el queso fresco al lado."], tip: "Combinar fruta con algo de proteína evita el bajón de energía a media tarde." },
+  "o2-sabado-c": { tiempo: "20 min", ingredientes: ["200g de pavo picado", "1 huevo", "Ensalada variada"], pasos: ["Mezcla pavo picado con ajo, perejil y un huevo, forma las hamburguesas.", "Cocínalas 4 min por lado en plancha.", "Sirve con ensalada variada."], tip: "No compactes demasiado la carne al formar la hamburguesa o quedará dura." },
+  "o2-domingo-descanso-g1": { tiempo: "10 min", ingredientes: ["2 rebanadas de pan integral", "1 huevo", "100ml de leche", "1 fruta"], pasos: ["Bate un huevo con leche y canela.", "Empapa el pan y cocínalo 2 min por lado en sartén.", "Sirve con fruta troceada por encima."], tip: "Usa pan integral del día anterior, algo duro: absorbe mejor la mezcla." },
+  "o2-domingo-descanso-g2": { tiempo: "25 min", ingredientes: ["120g de fideos", "150g de marisco variado", "100g de pollo"], pasos: ["Sofríe pollo y marisco 5 min, reserva.", "Añade los fideos y el caldo caliente, cuece 10 min sin remover.", "Junta todo los últimos 2 min."], tip: "Tuesta ligeramente los fideos en seco antes de añadir el caldo, quedan más sueltos." },
+  "o2-domingo-descanso-l": { tiempo: "2 min", ingredientes: ["1 yogur griego", "1 cucharadita de miel", "10g de nueces"], pasos: ["Pon el yogur en un bol.", "Añade miel y nueces troceadas por encima."], tip: "Las nueces aportan omega-3, buenas para la recuperación muscular." },
+  "o2-domingo-descanso-c": { tiempo: "25 min", ingredientes: ["2 puerros", "1 patata", "80g de salmón ahumado"], pasos: ["Cuece puerro y patata en caldo 20 min y tritura.", "Sirve la crema en bol.", "Añade tiras de salmón ahumado por encima al momento de servir."], tip: "No hiervas el salmón ahumado, solo colócalo en la crema ya templada." },
+  "o2-domingo-partido-g1": { tiempo: "5 min", ingredientes: ["1 rebanada de pan integral", "1 cucharada de mermelada sin azúcar", "50g de queso fresco", "1 plátano"], pasos: ["Tuesta el pan.", "Unta la mermelada y el queso fresco.", "Sirve con el plátano al lado."], tip: "Antes de un partido, mejor hidratos sencillos que grasas pesadas." },
+  "o2-domingo-partido-g2": { tiempo: "25 min", ingredientes: ["2 patatas medianas", "200g de pechuga de pollo"], pasos: ["Cuece las patatas y hazlas puré con un poco de leche.", "Cocina el pollo en plancha 6-7 min por lado, sin especias fuertes.", "Sirve el puré con el pollo encima."], tip: "El puré de patata es de digestión rápida, ideal unas horas antes de competir." },
+  "o2-domingo-partido-l": { tiempo: "1 min", ingredientes: ["1 plátano", "1 cucharada de miel"], pasos: ["Pela el plátano.", "Añade un hilo de miel por encima."], tip: "Snack de absorción rápida, perfecto en el calentamiento." },
+  "o2-domingo-partido-c": { tiempo: "8 min", ingredientes: ["2 huevos", "1 panecillo integral", "Ensalada variada"], pasos: ["Haz una tortilla francesa con los 2 huevos.", "Ábrela en el panecillo.", "Sirve con ensalada al lado."], tip: "Después del partido, un bocadillo sencillo recupera sin pesar." },
 
-  "miercoles-g1": { tiempo: "10 min", ingredientes: ["70g de avena", "200ml de leche", "1 plátano", "2 huevos"], pasos: ["Calienta la leche sin hervir y añade la avena. Remueve 3-4 min a fuego medio.", "Añade el plátano troceado encima del porridge ya en el bol.", "Cuece los huevos 8 min en agua hirviendo, pélalos y sírvelos al lado."], tip: "Prepara los huevos la noche anterior y guárdalos en la nevera para ganar tiempo." },
-  "miercoles-g2": { tiempo: "30 min", ingredientes: ["300g de lentejas cocidas", "1 zanahoria, cebolla y pimiento", "1 rebanada de pan integral"], pasos: ["Sofríe cebolla, ajo, zanahoria y pimiento en aceite 5 min.", "Añade las lentejas (cocidas o de bote escurridas) y caldo. Cuece 15 min.", "Sirve con una rebanada de pan integral."], tip: "Las lentejas de bote ahorran 20 min: solo escúrrelas y enjuágalas bien." },
-  "miercoles-l": { tiempo: "1 min", ingredientes: ["200g de queso fresco 0%", "1 cucharada de miel"], pasos: ["Pon el queso fresco en un bol o plato.", "Vierte una cucharada de miel por encima."], tip: "El queso fresco 0% es una de las mejores fuentes de proteína por caloría que existen." },
-  "miercoles-c": { tiempo: "20 min", ingredientes: ["150g de filete de ternera", "2 patatas medianas", "1 tomate"], pasos: ["Pela y trocea las patatas, cuécelas al vapor 15 min.", "Calienta la plancha fuerte. Salpimenta el filete y cocínalo 2-3 min por lado.", "Corta el tomate en rodajas, aliña con aceite, sal y orégano."], tip: "Deja reposar el filete 2 min antes de cortarlo para que los jugos no se escapen." },
-
-  "jueves-desayuno": { tiempo: "12 min", ingredientes: ["1 yogur griego (200g)", "50g de avena", "1 kiwi", "2 huevos"], pasos: ["Cuece los huevos 8 min, enfríalos en agua fría y pélalos.", "Calienta la leche, añade la avena y remueve 3-4 min hasta que espese.", "Sirve el porridge con el kiwi troceado y los huevos al lado."], tip: "La avena en copos finos se hace más rápido que la gruesa y queda igual de bien." },
-  "jueves-almuerzo": { tiempo: "20 min", ingredientes: ["150g de arroz (crudo)", "2 huevos", "Cebolla, pimiento y calabacín"], pasos: ["Cuece el arroz en agua con sal. Reserva.", "Sofríe cebolla, pimiento y calabacín en aceite 5 min.", "Añade el arroz cocido, haz un hueco, rompe los huevos y mezcla."], tip: "Este arroz es perfecto para usar verduras que tengas en la nevera a punto de pasarse." },
-  "jueves-pre": { tiempo: "1 min", ingredientes: ["30g de frutos secos", "1 fruta"], pasos: ["Pesa 30g de frutos secos.", "Sirve con la fruta que tengas a mano."], tip: "Tómalo sobre las 19:00h, un par de horas antes de salir hacia el entreno." },
-  "jueves-recup": { tiempo: "6 min", ingredientes: ["2 huevos", "30g de jamón york o serrano", "1 rebanada de pan integral"], pasos: ["Bate los 2 huevos con sal.", "Saltea el jamón en taquitos 1 min, añade el huevo y cuaja removiendo.", "Sirve con la tostada."], tip: "A estas horas mejor algo rápido y ligero que una cena completa — no hace falta gran cantidad." },
-
-  "viernes-g1": { tiempo: "8 min", ingredientes: ["2 huevos", "1 rebanada de pan integral", "Café con leche"], pasos: ["Bate 2 huevos con sal y un chorrito de leche.", "Calienta una sartén con unas gotas de aceite a fuego medio.", "Vierte los huevos y deja que cuajen sin remover, doblando la tortilla a la mitad."], tip: "Para una tortilla francesa perfecta, el fuego debe ser medio-bajo." },
-  "viernes-g2": { tiempo: "10 min", ingredientes: ["200g de garbanzos cocidos", "1 lata de atún", "1 tomate y 1 pepino", "1 huevo duro", "40g de pan integral"], pasos: ["Escurre y enjuaga los garbanzos de bote.", "Trocea tomate, pepino y cebolleta. Mezcla con los garbanzos y el atún escurrido.", "Añade el huevo duro en rodajas y aliña con aceite, vinagre y sal."], tip: "Prepara esta ensalada la noche anterior y guárdala sin aliñar para que no se ablande." },
-  "viernes-l": { tiempo: "2 min", ingredientes: ["1 manzana", "30g de jamón serrano"], pasos: ["Lava la manzana y córtala en gajos.", "Sirve con las lonchas de jamón al lado."], tip: "El jamón serrano tiene más proteína por ración de lo que parece." },
-  "viernes-c": { tiempo: "30 min", ingredientes: ["150g de salmón", "60g de arroz (crudo)", "Calabacín, puerro y zanahoria"], pasos: ["Sofríe cebolla, calabacín, puerro y zanahoria. Añade caldo y cuece 20 min. Tritura.", "Coloca el salmón en bandeja con sal, limón y eneldo. Hornea a 200°C 15 min.", "Sirve la crema en bol, el salmón encima y el arroz al lado."], tip: "El salmón está listo cuando cambia de color naranja vivo a rosado opaco por dentro." },
-
-  "sabado-g1": { tiempo: "8 min", ingredientes: ["2 rebanadas de pan", "1 tomate", "2 huevos"], pasos: ["Tuesta el pan, frótalo con tomate maduro y un chorrito de aceite.", "Cuece los huevos 8 min en agua hirviendo. Pélalos y córtalos en mitades.", "Sirve las tostadas con los huevos al lado y el café con leche."], tip: "Los huevos cocidos duran 5 días en la nevera con cáscara: cuece varios de golpe." },
-  "sabado-g2": { tiempo: "60 min", ingredientes: ["200g de pollo (contramuslo o pechuga)", "1 patata", "1 tomate, cebolla y 1 huevo duro", "Pan integral"], pasos: ["Salpimienta el pollo y hornéalo a 200°C unos 40-45 min.", "Cuece una patata mediana, déjala enfriar y trocéala.", "Mezcla la patata con tomate, cebolla, huevo duro y aceitunas, aliña y sirve con el pollo."], tip: "El contramuslo queda más jugoso que la pechuga al horno y es más barato." },
-  "sabado-l": { tiempo: "2 min", ingredientes: ["1 fruta de temporada", "20g de frutos secos"], pasos: ["Pela o lava la fruta de temporada y trocéala.", "Sirve con los frutos secos al lado."], tip: "En julio/agosto: melocotón, nectarina, sandía y melón son ideales y muy económicos." },
-  "sabado-c": { tiempo: "20 min", ingredientes: ["3 huevos", "2 patatas medianas", "Ensalada verde", "Pan integral"], pasos: ["Pela y trocea 2 patatas medianas, fríelas en aceite a fuego medio hasta que estén blandas.", "Bate 3 huevos con sal, añade las patatas y mezcla.", "Vierte en sartén antiadherente, cuaja 3 min por cada lado."], tip: "Deja reposar la tortilla 5 min antes de cortarla: se asienta y se corta mejor." },
-
-  "domingo-descanso-g1": { tiempo: "8 min", ingredientes: ["60g de avena", "1 fruta", "Café"], pasos: ["Calienta la leche sin hervir y añade 60g de avena. Remueve 3-4 min.", "Sirve en un bol y añade la fruta troceada encima.", "Espolvorea canela o añade un chorrito de miel."], tip: "Buen día para preparar avena overnight: mézclala la noche anterior." },
-  "domingo-descanso-g2": { tiempo: "45 min", ingredientes: ["200g de garbanzos cocidos", "150g de pollo", "Zanahoria, patata y judía verde"], pasos: ["Sofríe cebolla, ajo y pimiento en aceite. Añade los garbanzos de bote escurridos.", "Añade el pollo troceado y caldo de pollo.", "Incorpora zanahoria, patata y judías verdes. Cuece todo 25 min."], tip: "Con restos de pollo asado del sábado este cocido sale en 20 minutos." },
-  "domingo-descanso-l": { tiempo: "2 min", ingredientes: ["1 yogur natural", "1 fruta"], pasos: ["Pon el yogur natural en un bol.", "Añade la fruta troceada encima."], tip: "Elige yogur natural sin azúcares añadidos, no el edulcorado ni el de sabores." },
-  "domingo-descanso-c": { tiempo: "10 min", ingredientes: ["2 huevos", "100g de champiñones", "Medio manojo de espárragos", "2 rebanadas de pan integral"], pasos: ["Limpia y lamina los champiñones. Trocea los espárragos en trozos de 3 cm.", "Saltéalos en sartén con aceite y ajo picado 4-5 min a fuego fuerte.", "Bate 2 huevos, viértelos en la sartén y remueve suavemente hasta que cuajen."], tip: "No tapes los champiñones al saltear: sueltan agua y necesitan evaporarla para dorarse." },
-
-  "domingo-partido-g1": { tiempo: "5 min", ingredientes: ["1 rebanada de pan", "1 cucharadita de miel", "1 plátano", "1 huevo"], pasos: ["Tuesta el pan y añade una fina capa de miel.", "Corta el plátano en rodajas por encima.", "Sirve con el huevo cocido aparte."], tip: "El día del partido, prioriza hidratos de fácil digestión y evita grasas pesadas." },
-  "domingo-partido-g2": { tiempo: "20 min", ingredientes: ["150g de arroz (crudo)", "200g de pechuga de pollo"], pasos: ["Cuece el arroz blanco.", "Cocina el pollo en plancha 6-7 min por lado, sin especias fuertes.", "Sirve el arroz con el pollo encima."], tip: "Come esta comida unas 3h antes del partido — simple, sin fibra en exceso." },
-  "domingo-partido-l": { tiempo: "1 min", ingredientes: ["1 plátano", "4 dátiles"], pasos: ["Pela el plátano.", "Sirve con los dátiles."], tip: "Snack rápido de azúcares de absorción rápida, ideal en el calentamiento antes del partido." },
-  "domingo-partido-c": { tiempo: "20 min", ingredientes: ["100g de pasta (crudo)", "200g de pollo", "Verduras variadas"], pasos: ["Cuece la pasta.", "Saltea pollo y verduras variadas 8 min.", "Mezcla todo y sirve — ¡a celebrar!"], tip: "Después del partido, no te olvides de hidratarte bien además de comer." }
+  "o3-lunes-g1": { tiempo: "12 min", ingredientes: ["200g de skyr", "40g de avena para la granola", "50g de frutos rojos"], pasos: ["Tuesta avena, un poco de miel y frutos secos en sartén sin aceite 8 min para la granola.", "Pon el skyr en un bol.", "Añade la granola y los frutos rojos por encima."], tip: "Haz granola de más y guárdala en un tarro cerrado: dura semanas." },
+  "o3-lunes-g2": { tiempo: "25 min", ingredientes: ["200g de pechuga de pollo", "150g de arroz basmati (crudo)", "100ml de leche de coco", "Curry en polvo"], pasos: ["Saltea cebolla y pollo troceado 8 min.", "Añade curry en polvo, leche de coco y cuece 10 min.", "Sirve con el arroz basmati cocido."], tip: "Usa leche de coco light si quieres bajar algo las calorías sin perder cremosidad." },
+  "o3-lunes-l": { tiempo: "3 min", ingredientes: ["1 zanahoria y ½ pepino", "80g de hummus"], pasos: ["Corta la zanahoria y el pepino en bastones.", "Sirve con una cucharada generosa de hummus para mojar."], tip: "El hummus casero tiene mucha menos sal que el envasado." },
+  "o3-lunes-c": { tiempo: "20 min", ingredientes: ["250g de rape", "Calabacín, pimiento y champiñón"], pasos: ["Salpimienta el rape y cocínalo 3-4 min por lado en plancha.", "Saltea calabacín, pimiento y champiñón 6 min.", "Sirve todo junto con un chorrito de limón."], tip: "El rape no se debe mover mucho en la plancha o se rompe." },
+  "o3-martes-desayuno": { tiempo: "5 min", ingredientes: ["1 rebanada de pan de centeno", "30g de queso de untar", "60g de salmón ahumado"], pasos: ["Tuesta el pan de centeno.", "Unta el queso fresco.", "Añade el salmón ahumado en tiras por encima."], tip: "El pan de centeno tiene menos impacto en el azúcar en sangre que el pan blanco." },
+  "o3-martes-almuerzo": { tiempo: "35 min", ingredientes: ["300g de lentejas cocidas", "50g de chorizo magro", "Zanahoria y pimiento"], pasos: ["Sofríe cebolla, zanahoria y pimiento 8 min.", "Añade las lentejas, un poco de chorizo y caldo, cuece 20 min.", "Rectifica de sal."], tip: "Las lentejas pardinas aguantan mejor la cocción larga sin deshacerse." },
+  "o3-martes-pre": { tiempo: "2 min", ingredientes: ["1 naranja", "20g de almendras"], pasos: ["Pela la naranja y sepárala en gajos.", "Sirve con las almendras al lado."], tip: "Tómalo sobre las 19:00h, un par de horas antes de salir hacia el entreno." },
+  "o3-martes-recup": { tiempo: "2 min", ingredientes: ["1 yogur proteico", "1 plátano", "10g de nueces"], pasos: ["Pon el yogur en un bol.", "Añade el plátano troceado.", "Termina con las nueces."], tip: "Snack sin cocinar, listo en 2 minutos tras llegar del entreno." },
+  "o3-miercoles-g1": { tiempo: "10 min", ingredientes: ["2 huevos", "1 tortilla de trigo integral", "Un puñado de espinacas", "30g de queso"], pasos: ["Bate 2 huevos y cocínalos como una tortilla fina.", "Coloca la tortilla sobre el wrap con espinacas y queso.", "Enrolla y corta por la mitad."], tip: "Cocina el huevo a fuego bajo para que quede como una lámina fina, fácil de enrollar." },
+  "o3-miercoles-g2": { tiempo: "25 min", ingredientes: ["250g de garbanzos cocidos", "100g de bacalao desmigado", "Un puñado de espinacas", "Pan"], pasos: ["Sofríe cebolla y ajo, añade pimentón y un poco de tomate.", "Incorpora garbanzos cocidos, espinacas y bacalao desmigado, cuece 12 min.", "Ajusta de sal y sirve."], tip: "Si usas bacalao salado, ponlo en agua 24h antes cambiándola varias veces." },
+  "o3-miercoles-l": { tiempo: "70 min", ingredientes: ["6 dátiles", "40g de avena"], pasos: ["Tritura dátiles, avena y un poco de agua hasta formar una pasta.", "Extiende en un molde y deja enfriar en la nevera 1h.", "Corta en barritas."], tip: "Los dátiles Medjoul son más blandos y dulces, ideales para que la mezcla ligue." },
+  "o3-miercoles-c": { tiempo: "45 min", ingredientes: ["300g de costillas de cerdo", "2 patatas medianas para el puré"], pasos: ["Marina las costillas con ajo, pimentón y limón 30 min.", "Hornea a 190°C 40 min, dando la vuelta a mitad.", "Sirve con puré de patata casero."], tip: "Cubre la bandeja con papel de aluminio la primera mitad del horneado para que no se sequen." },
+  "o3-jueves-desayuno": { tiempo: "10 min", ingredientes: ["100g de gambas peladas", "100g de champiñón", "2 huevos", "1 tostada"], pasos: ["Saltea champiñón laminado 4 min.", "Añade gambas peladas 2 min más.", "Vierte 2 huevos batidos y cuaja removiendo, sirve con la tostada."], tip: "Añade las gambas al final para que no queden gomosas por exceso de cocción." },
+  "o3-jueves-almuerzo": { tiempo: "50 min", ingredientes: ["1 boniato grande", "150g de pollo", "Pimiento y cebolla"], pasos: ["Hornea el boniato entero 40 min a 200°C hasta que esté blando.", "Saltea pollo troceado con verduras.", "Abre el boniato y rellénalo con el salteado."], tip: "Pincha el boniato con un tenedor antes de hornear para que no reviente." },
+  "o3-jueves-pre": { tiempo: "2 min", ingredientes: ["1 yogur proteico", "1 cucharada de semillas de chía"], pasos: ["Pon el yogur en un bol.", "Añade una cucharada de semillas de chía y remueve."], tip: "Tómalo sobre las 19:00h, un par de horas antes de salir hacia el entreno." },
+  "o3-jueves-recup": { tiempo: "5 min", ingredientes: ["2 huevos", "1 rebanada de pan integral"], pasos: ["Bate los huevos con sal.", "Cocina en sartén a fuego medio-bajo sin remover, doblando por la mitad.", "Sirve con la tostada."], tip: "Una tortilla francesa pequeña es de las cenas más rápidas que existen — menos de 5 minutos." },
+  "o3-viernes-g1": { tiempo: "5 min", ingredientes: ["2 rebanadas de pan integral", "20g de crema de cacahuete", "1 plátano"], pasos: ["Tuesta el pan integral.", "Unta la crema de cacahuete 100% cacahuete.", "Añade el plátano en rodajas por encima."], tip: "Revisa la etiqueta: la crema de cacahuete debe llevar solo cacahuete, sin azúcar añadido." },
+  "o3-viernes-g2": { tiempo: "20 min", ingredientes: ["150g de quinoa (crudo)", "200g de pechuga de pollo", "½ aguacate"], pasos: ["Cuece la quinoa 12 min y escurre.", "Saltea el pollo en tiras 6 min.", "Mezcla todo con aguacate en dados y aliña con lima."], tip: "Añade el aguacate al final, justo antes de servir, para que no se oxide." },
+  "o3-viernes-l": { tiempo: "2 min", ingredientes: ["2 cuajadas", "10g de nueces", "1 cucharadita de miel"], pasos: ["Pon la cuajada en un bol.", "Añade nueces troceadas y un hilo de miel."], tip: "La cuajada se sirve fría directamente del molde, sin remover." },
+  "o3-viernes-c": { tiempo: "20 min", ingredientes: ["200g de salmón", "1 puerro", "1 limón"], pasos: ["Coloca el salmón sobre papel de horno con puerro en juliana, limón y eneldo.", "Cierra el paquete y hornea 15 min a 200°C.", "Abre con cuidado (sale vapor) y sirve."], tip: "El papillote conserva todos los jugos del pescado — apenas necesita aceite." },
+  "o3-sabado-g1": { tiempo: "10 min", ingredientes: ["60g de avena", "1 cucharadita de cacao puro", "1 plátano", "10g de cacahuete"], pasos: ["Cuece la avena con leche y cacao puro 4 min.", "Añade el plátano en rodajas.", "Termina con un poco de cacahuete troceado."], tip: "El cacao puro en polvo aporta sabor sin sumar apenas calorías extra." },
+  "o3-sabado-g2": { tiempo: "30 min", ingredientes: ["150g de arroz (crudo)", "150g de sepia", "100g de gambas", "Tinta de calamar"], pasos: ["Sofríe ajo, sepia y gambas 5 min.", "Añade el arroz, la tinta y el caldo caliente, cuece 18 min sin remover.", "Deja reposar 5 min antes de servir."], tip: "Disuelve la tinta en un poco de caldo aparte antes de añadirla, se reparte mejor." },
+  "o3-sabado-l": { tiempo: "2 min", ingredientes: ["1 fruta de temporada", "1 yogur natural"], pasos: ["Trocea la fruta.", "Sirve junto con el yogur."], tip: "Combina bien fruta ácida con yogur para un efecto refrescante." },
+  "o3-sabado-c": { tiempo: "20 min", ingredientes: ["2 filetes de pechuga de pollo", "2 lonchas de jamón", "2 lonchas de queso", "Ensalada verde"], pasos: ["Abre la pechuga en libro, rellena con jamón y queso y ciérrala con palillos.", "Dora en plancha 4 min por lado.", "Sirve con ensalada verde."], tip: "Golpea antes la pechuga para que quede fina y sea más fácil cerrarla." },
+  "o3-domingo-descanso-g1": { tiempo: "10 min", ingredientes: ["2 rebanadas de pan integral", "2 lonchas de jamón york", "2 lonchas de queso", "1 fruta"], pasos: ["Tuesta el pan integral.", "Añade el jamón york y el queso, funde 1 min en sartén.", "Sirve con la fruta al lado."], tip: "Si tienes prisa, este montado también funciona frío." },
+  "o3-domingo-descanso-g2": { tiempo: "35 min", ingredientes: ["150g de arroz (crudo)", "300g de conejo troceado", "Judía verde, pimiento y tomate"], pasos: ["Dora el conejo troceado 8 min.", "Añade verduras y sofríe 5 min más.", "Incorpora el arroz y el caldo, cuece 18 min."], tip: "El conejo es una carne muy magra — no lo cocines de más o quedará seco." },
+  "o3-domingo-descanso-l": { tiempo: "2 min", ingredientes: ["1 yogur griego", "1 plátano", "Canela"], pasos: ["Pon el yogur en un bol.", "Añade el plátano en rodajas y espolvorea canela."], tip: "La canela ayuda a regular el azúcar en sangre y da un toque dulce sin calorías." },
+  "o3-domingo-descanso-c": { tiempo: "30 min", ingredientes: ["200g de pescado variado", "100g de marisco", "Fideo fino o arroz"], pasos: ["Sofríe cebolla, ajo y tomate 10 min.", "Añade caldo de pescado, arroz o fideo fino y cuece 12 min.", "Incorpora pescado y marisco los últimos 4 min."], tip: "Un caldo de pescado casero da mucho más sabor que uno de brick." },
+  "o3-domingo-partido-g1": { tiempo: "6 min", ingredientes: ["50g de avena", "200ml de leche", "1 plátano", "1 cucharada de miel"], pasos: ["Cuece la avena con la leche 4 min.", "Añade el plátano troceado.", "Termina con un hilo de miel."], tip: "Un clásico sencillo antes de competir: hidratos de fácil digestión." },
+  "o3-domingo-partido-g2": { tiempo: "25 min", ingredientes: ["150g de arroz (crudo)", "200g de pechuga de pollo", "Zanahoria y calabacín"], pasos: ["Cuece el arroz.", "Cocina el pollo en dados con la verdura 10 min.", "Mezcla todo y sirve."], tip: "Evita salsas pesadas o muy especiadas la comida previa al partido." },
+  "o3-domingo-partido-l": { tiempo: "1 min", ingredientes: ["4 dátiles", "15g de pasas"], pasos: ["Sirve los dátiles y las pasas juntos en un bol pequeño."], tip: "Snack rápido de azúcares simples para el calentamiento." },
+  "o3-domingo-partido-c": { tiempo: "15 min", ingredientes: ["100g de pasta (crudo)", "1 lata de atún", "Tomate y aceitunas"], pasos: ["Cuece la pasta.", "Mezcla con el atún escurrido, tomate y aceitunas.", "Aliña con aceite de oliva."], tip: "Fácil de preparar con antelación si el partido acaba tarde." }
 };
 
 function toggleReceta(key) {
@@ -1334,25 +1507,36 @@ function toggleHorario(idx, valor) {
 
 function setDieta(i) { dietaIdx = i; expandido = null; renderDieta(); }
 
+function setMenuOpcion(n) { menuOpcion = n; expandido = null; renderDieta(); renderCompra(); }
+
+function renderMenuOpcionTabs() {
+  const el = document.getElementById('menu-opcion-tabs');
+  if (!el) return;
+  el.innerHTML = [1, 2, 3].map(n =>
+    `<button class="diet-week-tab ${n === menuOpcion ? 'active' : ''}" onclick="setMenuOpcion(${n})">Menú ${n}</button>`
+  ).join('');
+}
+
 function renderDieta() {
+  renderMenuOpcionTabs();
   const tabsEl = document.getElementById('diet-tabs');
   const cardEl = document.getElementById('diet-card');
   if (!tabsEl || !cardEl) return;
 
   tabsEl.innerHTML = NOMBRES_DIA.map((nombre, i) => {
-    const d = DIETA_SEMANA[i];
-    const esDescanso = d.modo === 'descanso';
+    const esDescanso = DIA_MODO[i] === 'descanso';
     return `<button class="diet-tab ${i === dietaIdx ? 'active' : ''}" onclick="setDieta(${i})">
       <span class="ddot ${esDescanso ? 'ddot-descanso' : 'ddot-entreno'}"></span>${nombre}
     </button>`;
   }).join('');
 
-  const d = DIETA_SEMANA[dietaIdx];
-  const modoDom = d.modo === 'variable' ? (horarios[dietaIdx] || 'descanso') : null;
-  const info = d.modo === 'variable' ? d[modoDom] : d;
-  const horario = horarios[dietaIdx] || (d.modo === 'variable' ? 'descanso' : 'manana');
-  const comidas = construirComidas(dietaIdx);
-  const esDescansoLabel = d.modo === 'descanso' || (d.modo === 'variable' && modoDom === 'descanso');
+  const modo = DIA_MODO[dietaIdx];
+  const d = DIETA_SEMANAS[menuOpcion][dietaIdx];
+  const modoDom = modo === 'variable' ? (horarios[dietaIdx] || 'descanso') : null;
+  const info = modo === 'variable' ? d[modoDom] : d;
+  const horario = horarios[dietaIdx] || (modo === 'variable' ? 'descanso' : 'manana');
+  const comidas = construirComidas(menuOpcion, dietaIdx);
+  const esDescansoLabel = modo === 'descanso' || (modo === 'variable' && modoDom === 'descanso');
 
   let html = `
     <div class="diet-header">
@@ -1361,14 +1545,14 @@ function renderDieta() {
         <span class="diet-kcal"> · ${info.kcal} kcal</span>
       </div>
       <span class="diet-tipo ${esDescansoLabel ? 'diet-tipo-descanso' : 'diet-tipo-entreno'}">${
-        d.modo === 'equipo' ? 'Entreno de equipo' :
-        d.modo === 'descanso' ? 'Día de descanso' :
-        d.modo === 'variable' ? (modoDom === 'partido' ? 'Día de partido' : 'Día de descanso') :
+        modo === 'equipo' ? 'Entreno de equipo' :
+        modo === 'descanso' ? 'Día de descanso' :
+        modo === 'variable' ? (modoDom === 'partido' ? 'Día de partido' : 'Día de descanso') :
         'Día de entreno propio'
       }</span>
     </div>`;
 
-  if (d.modo === 'propio') {
+  if (modo === 'propio') {
     html += `
     <div style="padding:12px 18px 0;">
       <div class="horario-toggle">
@@ -1377,7 +1561,7 @@ function renderDieta() {
       </div>
     </div>`;
   }
-  if (d.modo === 'variable') {
+  if (modo === 'variable') {
     html += `
     <div style="padding:12px 18px 0;">
       <div class="horario-toggle">
@@ -1389,7 +1573,7 @@ function renderDieta() {
 
   comidas.forEach(c => {
     const esMarker = c.kcal === 0;
-    const key = c.slot ? recetaKey(dietaIdx, c.slot) : null;
+    const key = c.slot ? recetaKey(menuOpcion, dietaIdx, c.slot) : null;
     const abierto = key && expandido === key;
     const r = key ? RECETAS[key] : null;
     const altTexto = [c.alt, c.contexto].filter(Boolean).join(' · ');
@@ -1431,76 +1615,231 @@ function renderDieta() {
 
 renderDieta();
 
-// ── LISTA DE LA COMPRA ─────────────────────────────────────
-const COMPRA = [
-  { sec: "Proteínas", items: [
-    { n: "Pechuga de pollo", q: "800g" },
-    { n: "Filete de ternera", q: "150g" },
-    { n: "Merluza", q: "200g" },
-    { n: "Salmón", q: "150g" },
-    { n: "Atún en lata", q: "3 latas (80g c/u)" },
-    { n: "Huevos", q: "28 uds (2 docenas y media aprox.)" },
-    { n: "Jamón serrano", q: "60g en lonchas" },
-    { n: "Jamón york", q: "50g en lonchas" },
-    { n: "Pavo en lonchas", q: "100g" }
-  ]},
-  { sec: "Lácteos", items: [
-    { n: "Leche semidesnatada", q: "1,5 litros" },
-    { n: "Yogur griego natural (sin azúcar)", q: "3 uds" },
-    { n: "Yogur natural", q: "1 ud" },
-    { n: "Yogur proteico", q: "1 ud" },
-    { n: "Queso fresco 0%", q: "200g" },
-    { n: "Proteína en polvo", q: "opcional, para el batido del martes" }
-  ]},
-  { sec: "Verduras y hortalizas", items: [
-    { n: "Lechuga o mezclum", q: "1 bolsa" },
-    { n: "Tomates", q: "1 kg" },
-    { n: "Pepino", q: "1 ud" },
-    { n: "Pimientos (rojo y verde)", q: "2 uds" },
-    { n: "Cebolla", q: "3 uds" },
-    { n: "Ajo", q: "1 cabeza" },
-    { n: "Calabacín", q: "2 uds" },
-    { n: "Zanahoria", q: "2 uds" },
-    { n: "Puerro", q: "1 ud" },
-    { n: "Champiñones", q: "150g" },
-    { n: "Espárragos verdes", q: "1 manojo" },
-    { n: "Judías verdes", q: "100g" },
-    { n: "Aguacate", q: "1 ud" }
-  ]},
-  { sec: "Frutas", items: [
-    { n: "Plátanos", q: "5 uds" },
-    { n: "Naranjas", q: "2 uds" },
-    { n: "Manzanas", q: "2 uds" },
-    { n: "Kiwi", q: "1 ud" },
-    { n: "Dátiles", q: "4 uds" },
-    { n: "Fruta de temporada", q: "a elección" }
-  ]},
-  { sec: "Hidratos y cereales", items: [
-    { n: "Arroz (redondo o largo)", q: "550g" },
-    { n: "Pasta integral", q: "180g" },
-    { n: "Pasta normal", q: "100g" },
-    { n: "Avena en copos", q: "270g" },
-    { n: "Pan integral de molde o barra", q: "1 paquete / barra" }
-  ]},
-  { sec: "Legumbres y conservas", items: [
-    { n: "Garbanzos cocidos (bote)", q: "2 botes (400g c/u)" },
-    { n: "Lentejas cocidas (bote)", q: "1 bote (400g)" },
-    { n: "Tomate triturado natural", q: "1 bote" },
-    { n: "Aceitunas", q: "bote pequeño" }
-  ]},
-  { sec: "Patatas", items: [
-    { n: "Patatas", q: "1,2 kg" }
-  ]},
-  { sec: "Despensa y condimentos", items: [
-    { n: "Aceite de oliva virgen extra", q: "si no tienes" },
-    { n: "Sal y pimienta negra", q: "si no tienes" },
-    { n: "Limón", q: "3 uds" },
-    { n: "Miel", q: "tarro pequeño" },
-    { n: "Frutos secos (nueces o almendras)", q: "100g" },
-    { n: "Caldo de pollo (brick o pastillas)", q: "1 litro o 4 pastillas" }
-  ]}
-];
+// ── LISTA DE LA COMPRA (una por menú) ─────────────────────────
+const COMPRA_OPCIONES = {
+  1: [
+    { sec: "Proteínas", items: [
+      { n: "Pechuga de pollo", q: "800g" },
+      { n: "Filete de ternera", q: "150g" },
+      { n: "Merluza", q: "200g" },
+      { n: "Salmón", q: "150g" },
+      { n: "Atún en lata", q: "3 latas (80g c/u)" },
+      { n: "Huevos", q: "28 uds (2 docenas y media aprox.)" },
+      { n: "Jamón serrano", q: "60g en lonchas" },
+      { n: "Jamón york", q: "50g en lonchas" },
+      { n: "Pavo en lonchas", q: "100g" }
+    ]},
+    { sec: "Lácteos", items: [
+      { n: "Leche semidesnatada", q: "1,5 litros" },
+      { n: "Yogur griego natural (sin azúcar)", q: "3 uds" },
+      { n: "Yogur natural", q: "1 ud" },
+      { n: "Yogur proteico", q: "1 ud" },
+      { n: "Queso fresco 0%", q: "200g" },
+      { n: "Proteína en polvo", q: "opcional, para el batido del martes" }
+    ]},
+    { sec: "Verduras y hortalizas", items: [
+      { n: "Lechuga o mezclum", q: "1 bolsa" },
+      { n: "Tomates", q: "1 kg" },
+      { n: "Pepino", q: "1 ud" },
+      { n: "Pimientos (rojo y verde)", q: "2 uds" },
+      { n: "Cebolla", q: "3 uds" },
+      { n: "Ajo", q: "1 cabeza" },
+      { n: "Calabacín", q: "2 uds" },
+      { n: "Zanahoria", q: "2 uds" },
+      { n: "Puerro", q: "1 ud" },
+      { n: "Champiñones", q: "150g" },
+      { n: "Espárragos verdes", q: "1 manojo" },
+      { n: "Judías verdes", q: "100g" },
+      { n: "Aguacate", q: "1 ud" }
+    ]},
+    { sec: "Frutas", items: [
+      { n: "Plátanos", q: "5 uds" },
+      { n: "Naranjas", q: "2 uds" },
+      { n: "Manzanas", q: "2 uds" },
+      { n: "Kiwi", q: "1 ud" },
+      { n: "Dátiles", q: "4 uds" },
+      { n: "Fruta de temporada", q: "a elección" }
+    ]},
+    { sec: "Hidratos y cereales", items: [
+      { n: "Arroz (redondo o largo)", q: "550g" },
+      { n: "Pasta integral", q: "180g" },
+      { n: "Pasta normal", q: "100g" },
+      { n: "Avena en copos", q: "270g" },
+      { n: "Pan integral de molde o barra", q: "1 paquete / barra" }
+    ]},
+    { sec: "Legumbres y conservas", items: [
+      { n: "Garbanzos cocidos (bote)", q: "2 botes (400g c/u)" },
+      { n: "Lentejas cocidas (bote)", q: "1 bote (400g)" },
+      { n: "Tomate triturado natural", q: "1 bote" },
+      { n: "Aceitunas", q: "bote pequeño" }
+    ]},
+    { sec: "Patatas", items: [
+      { n: "Patatas", q: "1,2 kg" }
+    ]},
+    { sec: "Despensa y condimentos", items: [
+      { n: "Aceite de oliva virgen extra", q: "si no tienes" },
+      { n: "Sal y pimienta negra", q: "si no tienes" },
+      { n: "Limón", q: "3 uds" },
+      { n: "Miel", q: "tarro pequeño" },
+      { n: "Frutos secos (nueces o almendras)", q: "100g" },
+      { n: "Caldo de pollo (brick o pastillas)", q: "1 litro o 4 pastillas" }
+    ]}
+  ],
+  2: [
+    { sec: "Proteínas", items: [
+      { n: "Pechuga de pollo", q: "800g" },
+      { n: "Solomillo de cerdo", q: "200g" },
+      { n: "Bacalao", q: "200g" },
+      { n: "Merluza", q: "200g" },
+      { n: "Gambas", q: "250g" },
+      { n: "Marisco variado (mejillón/calamar)", q: "150g" },
+      { n: "Huevos", q: "16 uds" },
+      { n: "Requesón", q: "150g" },
+      { n: "Queso fresco", q: "230g" },
+      { n: "Skyr", q: "200g" },
+      { n: "Chorizo magro", q: "50g" },
+      { n: "Pavo en lonchas", q: "5 lonchas" },
+      { n: "Pavo picado", q: "200g" },
+      { n: "Salmón ahumado", q: "80g" }
+    ]},
+    { sec: "Lácteos", items: [
+      { n: "Leche semidesnatada", q: "1 litro" },
+      { n: "Yogur griego natural", q: "4 uds" },
+      { n: "Proteína en polvo", q: "si tienes bote" }
+    ]},
+    { sec: "Verduras y hortalizas", items: [
+      { n: "Aguacate", q: "1 ud" },
+      { n: "Cebolla", q: "4 uds" },
+      { n: "Pimientos", q: "3 uds" },
+      { n: "Zanahoria", q: "2 uds" },
+      { n: "Calabaza", q: "300g" },
+      { n: "Calabacín", q: "2 uds" },
+      { n: "Puerro", q: "2 uds" },
+      { n: "Tomates", q: "4 uds" },
+      { n: "Judías verdes", q: "100g" },
+      { n: "Lechuga", q: "1 bolsa" }
+    ]},
+    { sec: "Frutas", items: [
+      { n: "Manzana", q: "1 ud" },
+      { n: "Plátanos", q: "4 uds" },
+      { n: "Kiwi", q: "1 ud" },
+      { n: "Arándanos", q: "40g" },
+      { n: "Naranja", q: "1 ud" },
+      { n: "Fruta de temporada", q: "2 piezas" }
+    ]},
+    { sec: "Hidratos y cereales", items: [
+      { n: "Quinoa", q: "150g" },
+      { n: "Cuscús", q: "120g" },
+      { n: "Arroz", q: "300g" },
+      { n: "Fideos", q: "120g" },
+      { n: "Avena en copos", q: "150g" },
+      { n: "Pan integral", q: "6 rebanadas" },
+      { n: "Panecillo integral", q: "1 ud" }
+    ]},
+    { sec: "Legumbres y conservas", items: [
+      { n: "Alubias blancas cocidas", q: "1 bote (300g)" },
+      { n: "Atún en lata", q: "1 lata" },
+      { n: "Maíz en lata", q: "1 lata" },
+      { n: "Aceitunas", q: "bote pequeño" },
+      { n: "Tomate triturado natural", q: "1 bote" }
+    ]},
+    { sec: "Patatas", items: [
+      { n: "Patatas", q: "1,7 kg" },
+      { n: "Boniato", q: "1 ud" }
+    ]},
+    { sec: "Despensa y condimentos", items: [
+      { n: "Aceite de oliva virgen extra", q: "si no tienes" },
+      { n: "Mermelada sin azúcar", q: "tarro pequeño" },
+      { n: "Miel", q: "si no tienes" },
+      { n: "Almendras", q: "20g" },
+      { n: "Anacardos", q: "30g" },
+      { n: "Nueces", q: "20g" }
+    ]}
+  ],
+  3: [
+    { sec: "Proteínas", items: [
+      { n: "Pechuga de pollo", q: "800g" },
+      { n: "Rape", q: "250g" },
+      { n: "Bacalao", q: "300g" },
+      { n: "Salmón", q: "200g" },
+      { n: "Salmón ahumado", q: "60g" },
+      { n: "Costillas de cerdo", q: "300g" },
+      { n: "Conejo", q: "300g" },
+      { n: "Sepia", q: "150g" },
+      { n: "Gambas", q: "200g" },
+      { n: "Pescado y marisco variado (para sopa)", q: "300g" },
+      { n: "Atún en lata", q: "1 lata" },
+      { n: "Huevos", q: "14 uds" },
+      { n: "Queso de untar", q: "30g" },
+      { n: "Cuajada", q: "2 uds" },
+      { n: "Skyr", q: "200g" },
+      { n: "Jamón (york y serrano)", q: "4 lonchas" }
+    ]},
+    { sec: "Lácteos", items: [
+      { n: "Yogur proteico", q: "2 uds" },
+      { n: "Yogur natural", q: "1 ud" },
+      { n: "Yogur griego", q: "1 ud" },
+      { n: "Queso (para el wrap)", q: "30g" }
+    ]},
+    { sec: "Verduras y hortalizas", items: [
+      { n: "Zanahoria", q: "4 uds" },
+      { n: "Pepino", q: "1 ud" },
+      { n: "Espinacas frescas", q: "2 puñados" },
+      { n: "Pimientos", q: "3 uds" },
+      { n: "Cebolla", q: "2 uds" },
+      { n: "Puerro", q: "1 ud" },
+      { n: "Champiñones", q: "100g" },
+      { n: "Judías verdes", q: "100g" },
+      { n: "Tomates", q: "3 uds" },
+      { n: "Ajo", q: "1 cabeza" },
+      { n: "Calabacín", q: "1 ud" }
+    ]},
+    { sec: "Frutas", items: [
+      { n: "Plátanos", q: "4 uds" },
+      { n: "Naranja", q: "1 ud" },
+      { n: "Aguacate", q: "½ ud" },
+      { n: "Dátiles", q: "10 uds" },
+      { n: "Pasas", q: "15g" },
+      { n: "Limón", q: "2 uds" },
+      { n: "Fruta de temporada", q: "2 piezas" }
+    ]},
+    { sec: "Hidratos y cereales", items: [
+      { n: "Arroz basmati", q: "150g" },
+      { n: "Arroz integral", q: "120g" },
+      { n: "Arroz (para negro, conejo y partido)", q: "450g" },
+      { n: "Pasta", q: "100g" },
+      { n: "Quinoa", q: "150g" },
+      { n: "Avena en copos", q: "150g" },
+      { n: "Pan integral", q: "4 rebanadas" },
+      { n: "Pan de centeno", q: "1 rebanada" },
+      { n: "Tortilla de trigo integral", q: "1 ud" },
+      { n: "Fideo fino", q: "50g" }
+    ]},
+    { sec: "Legumbres y conservas", items: [
+      { n: "Garbanzos cocidos", q: "250g" },
+      { n: "Lentejas cocidas", q: "300g" },
+      { n: "Hummus", q: "80g" },
+      { n: "Aceitunas", q: "bote pequeño" },
+      { n: "Tinta de calamar", q: "1 sobre" }
+    ]},
+    { sec: "Patatas", items: [
+      { n: "Patatas", q: "1 kg" },
+      { n: "Boniato", q: "1 ud" }
+    ]},
+    { sec: "Despensa y condimentos", items: [
+      { n: "Aceite de oliva virgen extra", q: "si no tienes" },
+      { n: "Crema de cacahuete", q: "20g" },
+      { n: "Almendras", q: "20g" },
+      { n: "Cacahuetes", q: "10g" },
+      { n: "Curry en polvo", q: "si no tienes" },
+      { n: "Leche de coco", q: "100ml" },
+      { n: "Canela", q: "si no tienes" },
+      { n: "Semillas de chía", q: "1 cucharada" }
+    ]}
+  ]
+};
 
+let compraOpcion = 1;
 let compraState = {};
 
 function cargarCompra() {
@@ -1515,39 +1854,56 @@ function guardarCompra() {
 }
 
 function toggleCompra(si, ii) {
-  const k = si + '-' + ii;
+  const k = compraOpcion + '-' + si + '-' + ii;
   compraState[k] = !compraState[k];
   guardarCompra();
   renderCompra();
 }
 
 function resetCompra() {
-  compraState = {};
+  Object.keys(compraState).forEach(k => {
+    if (k.startsWith(compraOpcion + '-')) delete compraState[k];
+  });
   guardarCompra();
   renderCompra();
 }
 
+function setCompraOpcion(n) {
+  compraOpcion = n;
+  renderCompra();
+}
+
+function renderCompraOpcionTabs() {
+  const el = document.getElementById('compra-opcion-tabs');
+  if (!el) return;
+  el.innerHTML = [1, 2, 3].map(n =>
+    `<button class="diet-week-tab ${n === compraOpcion ? 'active' : ''}" onclick="setCompraOpcion(${n})">Menú ${n}</button>`
+  ).join('');
+}
+
 function renderCompra() {
+  renderCompraOpcionTabs();
   const el = document.getElementById('compra-secciones');
   const progFill = document.getElementById('compra-prog-fill');
   const progTxt = document.getElementById('compra-prog-txt');
   if (!el) return;
 
+  const COMPRA = COMPRA_OPCIONES[compraOpcion];
   let total = 0, hechos = 0;
-  COMPRA.forEach((s, si) => s.items.forEach((_, ii) => { total++; if (compraState[si+'-'+ii]) hechos++; }));
+  COMPRA.forEach((s, si) => s.items.forEach((_, ii) => { total++; if (compraState[compraOpcion+'-'+si+'-'+ii]) hechos++; }));
   const pct = total > 0 ? Math.round((hechos/total)*100) : 0;
   if (progFill) progFill.style.width = pct + '%';
   if (progTxt) progTxt.textContent = hechos + ' / ' + total;
 
   el.innerHTML = COMPRA.map((s, si) => {
-    const secH = s.items.filter((_, ii) => compraState[si+'-'+ii]).length;
+    const secH = s.items.filter((_, ii) => compraState[compraOpcion+'-'+si+'-'+ii]).length;
     return `<div class="compra-sec">
       <div class="compra-sec-header">
         <span class="compra-sec-nombre">${s.sec}</span>
         <span class="compra-sec-count">${secH}/${s.items.length}</span>
       </div>
       <ul class="compra-items">${s.items.map((item, ii) => {
-        const done = !!compraState[si+'-'+ii];
+        const done = !!compraState[compraOpcion+'-'+si+'-'+ii];
         return `<li class="compra-item${done?' ci-done':''}" onclick="toggleCompra(${si},${ii})">
           <div class="compra-check"><span class="compra-check-icon">✓</span></div>
           <div>
@@ -1572,10 +1928,12 @@ renderDieta();
 window.toggleDia = toggleDia;
 window.resetSemanaEntreno = resetSemanaEntreno;
 window.setDieta = setDieta;
+window.setMenuOpcion = setMenuOpcion;
 window.toggleHorario = toggleHorario;
 window.toggleReceta = toggleReceta;
 window.toggleCompra = toggleCompra;
 window.resetCompra = resetCompra;
+window.setCompraOpcion = setCompraOpcion;
 
 </script>
 </body>
